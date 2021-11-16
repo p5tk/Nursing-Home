@@ -1,0 +1,26 @@
+body {
+	background-color: #f7f5ec;
+}
+
+.spacing{
+        padding-bottom:50px;
+        }
+.btn-size{
+ 		width:80px;
+ 		height:40px;
+}
+
+b{
+	color: rgb(117, 180, 130);
+	font-size: 20px;
+}
+
+form{
+	background-color: white;
+}
+
+footer{
+	background-color: #1f7b76;
+	color: white;
+}
+

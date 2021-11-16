@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extrasspringsecurity4">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+
+   <link rel="stylesheet" type="text/css" href="css/dailyRecords.css">
+   <link rel="stylesheet" type="text/css" href="css/daily-condition.css">
+    
+    <title>老人ホーム支援システム</title>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light">
+            <img class="img-responsive imgStyle" th:src="@{images/logo.jpg}">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{AdminHome}">ホーム </span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{PasswordChangeHome}">パスワード変更</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/logout}">ログアウト</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+     <!-- breadcrumb-area -->
+        <div class="bc-icons-2">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb amber-background navAndFooter">
+                    <li class="breadcrumb-item"><a class="black-text" th:href="@{AdminHome}">ホーム</a><i
+                            class="fa fa-angle-right mx-4"></i></li>
+                    <li class="breadcrumb-item active"><a class="black-text">毎日状況(一括入力)</a>
+                        <i aria-hidden="true"></i></li>
+                    <h5 th:inline="text" style="margin-left: 80%">[[${userName}]]</h5>
+                </ol>
+            </nav>
+        </div>
+
+        <form action="/chooseElders" method="post">
+            <div class="row mb-3">
+                <div class="col-lg-1">
+                    <label>日付</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="date" class="form-control" name="record_date" required>
+                </div>
+                <div class="col-lg-1"></div>
+                <div class="col-lg-1">
+                    <label>カテゴリー</label>
+                </div>
+                <div class="col-lg-3">
+                    <select class="form-control" name="category" required>
+                    	<option></option>
+                    	<option value="vital">バイタルデータ入力</option>
+                    	<option value="mealBreakfast">食事データ入力 > 朝食</option>
+                    	<option value="mealLunch">食事データ入力 > 昼食</option>
+                    	<option value="mealDinner">食事データ入力 > 夕食</option>
+                    	<option value="snack">食事（おやつ）データ入力</option>
+                    	<option value="personalCare">パーソナルケアデータ入力</option>
+                    	<option value="medication">投薬データ入力</option>
+                    	<option value="activity">追加データ入力</option>
+                    </select>
+                </div>
+                
+                <div class="col-lg-2">
+                	<button type="submit" class="btn btnStyle">高齢者を選択します</button>
+                </div>
+                <div class="col-lg-2"><a th:href="@{/DailyConditionIndividual}" class="btn btn-secondary" >個人入力</a></div>
+                </div>
+                
+                 </form>
+                
+                <div class="row justify-content-center">
+                	<div class="col-lg-5">
+                		<p style="color:red;">[[${error}]]</p>
+                	</div>
+                </div>
+                
+	<footer class="navAndFooter">
+        <div class="row justify-content-center padding-top-15 amber-background" id="copy-right-footer">
+            <p class="footerText">&copy; Copyright <strong>Bliss Stock</strong>. All Rights Reserved</p>
+        </div>
+    </footer>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+   
+</body>
+
+</html>

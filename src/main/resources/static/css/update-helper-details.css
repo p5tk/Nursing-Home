@@ -1,0 +1,30 @@
+ul.shiftDayList {
+    overflow-x:hidden;
+    white-space:nowrap;
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+    vertical-align: top;
+    list-style-type:none;
+}
+
+ul.shiftDayList li {
+    display:inline;
+}
+.spacing{
+        padding-bottom:50px;
+}
+.btn-size{
+ width:80px;
+ height:40px;
+}
+.helper_img{
+max-width:150px;
+max-height:200px;
+border:1px solid grey;
+border-radius:5px;
+}
+
+b{
+	color: green;
+}

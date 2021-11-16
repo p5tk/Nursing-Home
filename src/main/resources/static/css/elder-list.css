@@ -1,0 +1,26 @@
+body {
+	background-color: #f7f5ec;
+}
+
+.colBG {
+            background-color: #1f7b76;
+            color: white;
+        }
+        .btn-color{
+        	background-color: #1f7b76;
+        	color: white;
+        }
+        .btnStyleElderList{
+        	width: 135px;
+        }
+        .btn-spacing{
+        margin-right: 20px;
+        margin-left: 20px;
+        }
+        .spacing{
+        padding-bottom:30px;
+        }
+        
+h5 {
+	color: white;
+}

@@ -1,0 +1,27 @@
+.colBG {
+            background-color: #1f7b76;
+        }
+        .btn-color{
+        	background-color: #1f7b76;
+        	color: white;
+        }
+        .btnStyle{
+        	background-color: #1f7b76;
+        	color: white;
+        	width: 135px;
+        }
+        .btn-spacing{
+        margin-right: 20px;
+        margin-left: 20px;
+        }
+        .spacing{
+        padding-bottom:30px;
+        }
+       
+ thead {
+ 	color: white;
+ }
+ 
+ h5 {
+ 	color: white;
+ }

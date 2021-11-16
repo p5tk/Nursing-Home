@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extrasspringsecurity4">
+
+<head>
+<meta charset="utf-8">
+<meta name="description" content="">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<!-- Title -->
+<title>老人ホーム支援システム</title>
+<link rel="shortcut icon" type="image/png" href="img/logo.png" />
+
+<!-- Bootstrap CSS File -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+	integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+	crossorigin="anonymous">
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<!-- Stylesheet -->
+<link rel="stylesheet" href="css/main-style.css">
+<link rel="stylesheet" href="css/elder-and-helper-input-form.css">
+</head>
+
+<body>
+	<div class="container-fluid">
+		<!-- navigation-bar-area -->
+		<nav class="navbar navbar-expand-lg navbar-light">
+			<img class="img-responsive" th:src="@{images/logo.jpg}">
+			<button class="navbar-toggler" type="button" data-toggle="collapse"
+				data-target="#navbarNav" aria-controls="navbarNav"
+				aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item"><a class="nav-link" th:href="@{AdminHome}">ホーム
+					</a></li>
+					<li class="nav-item"><a class="nav-link" th:href="@{PasswordChangeHome}">パスワード変更</a>
+					</li>
+					<li class="nav-item"><a class="nav-link" th:href="@{/logout}">ログアウト</a></li>
+				</ul>
+			</div>
+		</nav>
+
+		<!-- breadcrumb-area -->
+		<div class="bc-icons-2">
+			<nav aria-label="breadcrumb">
+				<ol class="breadcrumb amber-background">
+					<li class="breadcrumb-item"><a class="black-text" th:href="@{AdminHome}">ホーム</a><i
+						class="fa fa-angle-right mx-4"></i></li>
+					<li class="breadcrumb-item"><a class="black-text" th:href="@{HelperList}">ヘルパーさん一覧
+							</a><i class="fa fa-angle-right mx-4" aria-hidden="true"></i></li>
+					<li class="breadcrumb-item active">ヘルパーさん登録</li>
+					<h5 th:inline="text" style="margin-left: 70%">[[${userName}]]</h5>
+				</ol>
+			</nav>
+		</div>
+
+		<!-- form-area -->
+		<div class="container-fluid">
+			<div class="row justify-content-center padding-top-15">
+				<div class="col-lg-8">
+					<form method="post" action="/helperRegisterPost"
+						th:object="${helper}" enctype="multipart/form-data">
+						<div class="row form-sec-header">
+							<div class="col-12 padding-top-15 text-center">
+								<p>
+									<b>基本情報</b>
+								</p>
+							</div>
+						</div>
+
+						<div class="form-group row ">
+                            <label for="fName" class="col-auto col-md-3 col-form-label">名前（名）：</label>
+                            <label for="lblRequire" class="col col-md-1 col-form-label red-text">必須</label>
+                            <div class="col-md-8">
+                                <input type="text" id="fname" class="form-control" th:field="*{firstName}" placeholder="名" >
+                            	<small th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></small>
+                            </div>
+                        </div>
+
+                        <div class="form-group row ">
+                            <label for="lName" class="col-auto col-md-3 col-form-label">名前（姓）：</label>
+                            <label for="lblRequire" class="col col-md-1 col-form-label red-text">必須</label>
+                            <div class="col-md-8">
+                                <input type="text" id="lname" class="form-control" th:field="*{lastName}" placeholder="姓" >
+                            	<small th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></small>
+                            </div>
+                        </div>
+                        
+						<div class="form-group row">
+							<label for="" class="col-auto col-md-3 colbir-form-label">性別：</label>
+							<label for="" class="col col-md-1 col-form-label red-text">必須</label>
+							<div class="col-md-8">
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="radio" th:field="*{gender}"
+										id="gender" value="male" > <label
+										class="form-check-label" for="inlineRadio1">男性</label>
+								</div>
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="radio" th:field="*{gender}"
+										id="gender" value="female"> <label
+										class="form-check-label" for="inlineRadio2">女性</label>
+								</div><br>
+								<small th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}"></small>
+								
+							</div>
+						</div>
+						
+ 						<div class="form-group row ">
+							<label for="" class="col-auto col-md-3 col-form-label">生年月日：</label> <label for=""
+								class="col col-md-1 col-form-label red-text">必須</label>
+							<div class="col-md-8">
+								<input type="date" th:field="*{acc.birthDate}"
+									class="form-control" >
+								<small th:if="${#fields.hasErrors('acc.birthDate')}" th:errors="*{acc.birthDate}"></small>
+							</div>
+								
+						</div>
+
+
+						<div class="form-group row">
+							<label for="lblPhone" class="col-auto col-md-3 col-form-label">電話番号:</label> <label for="lblPhno"
+								class="col col-md-1 col-form-label red-text">必須</label>
+							<div class="col-md-3">
+								<select id="countryCode" th:field="*{countryCode}" class="form-control" >
+									<option value="95">+95</option>
+									<option value="74">+74</option>
+									<option value="855">+855</option>
+									<option value="1">+1</option>
+									<option value="86">+86</option>
+									<option value="33">+33</option>
+									<option value="49">+49</option>
+									<option value="852">+852</option>
+									<option value="62">+62</option>
+									<option value="81">+81</option>
+								</select>
+
+							</div>
+							<div class="col-md-5">
+								<input type="text" th:field="*{phoneNo}" class="form-control"
+									id="phone" placeholder="09********" >
+								<small th:if="${#fields.hasErrors('phoneNo')}" th:errors="*{phoneNo}"></small>
+									
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="lblphoto" class="col-auto col-md-3 col-form-label">写真：</label>
+							<label for="lblpto" class="col col-md-1 col-form-label red-text">必須</label>
+							<div class="col-md-8">
+								<input type="file" class="form-control" name="helperphoto" aria-describedby="inputGroupFileAddon01" >
+								<small th:text="${photoErr}"></small>
+								<small th:text="${photoTypeErr}"></small>
+							</div>
+							
+						</div>
+
+
+						<div class="row form-sec-header">
+							<div class="col-12 padding-top-21 text-center">
+								<p>
+									<b>ご住所</b>
+								</p>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<div class="col-12">
+								<input type="number" class="form-control" th:field="*{buildingNo}"
+									id="buildingNo" placeholder="建物名・号屋">
+								<small th:if="${#fields.hasErrors('buildingNo')}" th:errors="*{buildingNo}"></small>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<div class="col-12">
+								<input type="text" class="form-control"
+									th:field="*{streetAddress}" id="streetaddress"
+									placeholder="番地" >
+								<small th:if="${#fields.hasErrors('streetAddress')}" th:errors="*{streetAddress}"></small>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<div class="col-md-6">
+								<input type="text" class="form-control" id="city"
+									th:field="*{city}" placeholder="市区町村" >
+								<small th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></small>
+							</div>
+							<div class="col-md-6">
+								<input type="text" class="form-control" id="state"
+									th:field="*{state}" placeholder="都道府県" >
+								<small th:if="${#fields.hasErrors('state')}" th:errors="*{state}"></small>
+							</div>
+
+						</div>
+
+						<div class="form-group row">
+							<div class="col-md-6">
+								<input type="number" class="form-control" id="postalcode"
+									th:field="*{postalCode}" placeholder="郵便番号" >
+								<small th:if="${#fields.hasErrors('postalCode')}" th:errors="*{postalCode}"></small>
+							</div>
+							<div class="col-md-6">
+								<select class="form-control" th:field="*{country}">
+									<option value="">国を選んでください。</option>
+									   <option value="Afganistan">Afghanistan</option>
+									   <option value="Australia">Australia</option>
+									   <option value="Bangladesh">Bangladesh</option>
+									   <option value="Cambodia">Cambodia</option>
+									   <option value="Canada">Canada</option>
+									   <option value="China">China</option>
+									   <option value="France">France</option>
+									   <option value="Hong Kong">Hong Kong</option>
+									   <option value="Indonesia">Indonesia</option>
+									   <option value="India">India</option>
+									   <option value="Italy">Italy</option>
+									   <option value="Japan">Japan</option>
+									   <option value="Korea North">Korea North</option>
+									   <option value="Korea Sout">Korea South</option>
+									   <option value="Laos">Laos</option>
+									   <option value="Malaysia">Malaysia</option>
+									   <option value="Myanmar">Myanmar</option>
+									   <option value="Phillipines">Philippines</option>
+									   <option value="Singapore">Singapore</option>
+									   <option value="Taiwan">Taiwan</option>
+									   <option value="Thailand">Thailand</option>
+									   <option value="United Kingdom">United Kingdom</option>
+									   <option value="United States of America">United States of America</option>
+									   <option value="Vietnam">Vietnam</option>
+								</select>
+								<small th:if="${#fields.hasErrors('country')}" th:errors="*{country}"></small>
+							</div>
+
+						</div>
+
+
+						<div class="form-group row">
+							<label for="lblEducation"
+								class="col-auto col-md-3 col-form-label">教育：</label> <label
+								for="lblEdu" class="col col-md-1 col-form-label red-text">必須</label>
+							<div class="col-md-8">
+								<select id="countryCode" th:field="*{education}" class="form-control" >
+									<option value=""></option>
+									<option value="phd">博士号</option>
+									<option value="master">修士号</option>
+									<option value="bachelor"> 学位 </option>
+									<option value="diploma"> 学士</option>
+									<option value="undergraduate">学部生</option>
+									<option value="high school">高校生</option>
+									<option value="other">その他</option>
+								</select>
+								<small th:if="${#fields.hasErrors('education')}" th:errors="*{education}"></small>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="lblShiftDays"
+								class="col-auto col-md-3 col-form-label">シフト（曜日）：</label> <label
+								for="lblShiDays" class="col col-md-1 col-form-label red-text">必須</label>
+							<div class="col-md-8">
+								<span  th:each="eachShiftDay,stat: ${allShiftDays}">
+									<input type="checkbox"
+									th:field="*{helper_shift_days}"
+									th:value="${eachShiftDay.helperShiftDayId}" />
+									<label th:text="${eachShiftDay.shiftDayName}"></label>
+								</span><br>
+								<small th:text="${shiftErr}"></small>
+							</div>
+						</div>
+						
+						
+						<div class="row form-sec-header">
+							<div class="col-12 padding-top-30 text-center">
+								<p>
+									<b>認証情報</b>
+								</p>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="lblUsername" class="col-auto col-md-3 col-form-label">ユーザー名:</label> <label for="lblCode"
+								class="col col-md-1 col-form-label red-text">必須</label>
+							<div class="col-md-8">
+								<input type="text" th:field="*{acc.userName}"
+									class="form-control" >
+								<small th:if="${#fields.hasErrors('acc.userName')}" th:errors="*{acc.userName}"></small>
+								<small th:text="${usernameErr}"></small>
+							</div>
+						</div>
+						
+
+						<div class="form-group row">
+							<label for="lblOwnCode" class="col-auto col-md-3 col-form-label">自コード:</label> <label for="lblCode"
+								class="col col-md-1 col-form-label red-text">必須</label>
+							<div class="col-md-8">
+								<input type="number" th:field="*{acc.ownCodeNumber}"
+									class="form-control"  >
+								<small th:if="${#fields.hasErrors('acc.ownCodeNumber')}" th:errors="*{acc.ownCodeNumber}"></small>
+								<small th:text="${ownCodeErr}"></small>
+							</div>
+						</div>
+
+						<div class="form-group row ">
+							<label for="lblPassword" class="col-auto col-md-3 col-form-label">パスワード:</label>
+							<label for="lblPwd" class="col col-md-1 col-form-label red-text">必須</label>
+							<div class="col-md-8">
+								<input type="password" th:field="*{acc.password}"
+									class="form-control" >
+								<small th:if="${#fields.hasErrors('acc.password')}" th:errors="*{acc.password}"></small>
+							</div>
+
+						</div>
+
+
+						<div class="row form-sec-header">
+							<div class="col-12 padding-top-34 text-center">
+								<p>
+									<b>その他の情報</b>
+								</p>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="lblHireDate" class="col-auto col-md-3 col-form-label">入社日:</label> <label for="lblPwd"
+								class="col col-md-1 col-form-label red-text">必須</label>
+							<div class="col-md-8">
+								<input type="date" class="form-control" th:field="*{hireDate}" >
+								<small th:if="${#fields.hasErrors('hireDate')}" th:errors="*{hireDate}"></small>
+							</div>
+
+						</div>
+
+						<div class="form-group row">
+							<label for="lblContractStartDate"
+								class="col-auto col-md-3 col-form-label">契約開始日:</label> <label for="lblPwd"
+								class="col col-md-1 col-form-label red-text">必須</label>
+							<div class="col-md-8">
+								<input type="date" class="form-control"
+									th:field="*{contractStartDate}" >
+								<small th:if="${#fields.hasErrors('contractStartDate')}" th:errors="*{contractStartDate}"></small>
+								<small th:text="${startEndDateErr}"></small>
+							</div>
+
+						</div>
+						<div class="form-group row">
+							<label for="lblContractEndDate"
+								class="col-auto col-md-3 col-form-label">契約終了日:</label> <label for="lblPwd"
+								class="col col-md-1 col-form-label red-text">必須</label>
+							<div class="col-md-8">
+								<input type="date" class="form-control"
+									th:field="*{contractEndDate}" >
+								<small th:if="${#fields.hasErrors('contractEndDate')}" th:errors="*{contractEndDate}"></small>
+							</div>
+
+						</div>
+
+						<div class="form-group row">
+							<label for="lblHireDate" class="col-auto col-md-3 col-form-label">時給:</label> <label for="lblPwd"
+								class="col col-md-1 col-form-label red-text">必須</label>
+							<div class="col-md-6">
+								<input type="number" th:field="*{hourlyWage}" class="form-control"
+									id="hourlyWage" >
+								<small th:if="${#fields.hasErrors('hourlyWage')}" th:errors="*{hourlyWage}"></small>
+							</div>
+							<div class="col-md-2">
+								<select id="hourlyWage" th:field="*{hourlyWageCurrency}" class="form-control" >
+									<option value="kyats">キャット</option>
+									<option value="kip">キープ</option>
+									<option value="euro">ユーロ</option>
+									<option value="dollar">ドル</option>
+									<option value="poundStreiling">ポンド</option>
+									<option value="yen">円</option>
+									<option value="riel">リエル</option>
+									<option value="yuann">中国人民元 </option>
+									<option value="rupee">ルピー</option>
+									<option value="won"> ウォン</option>
+								</select>
+								
+							</div>
+
+						</div>
+
+						<div class="form-group row">
+							<label for="lblShiftType"
+								class="col-auto col-md-3 col-form-label">シフト種類:</label> <label
+								for="lblSftType" class="col col-md-1 col-form-label red-text">必須</label>
+							<div class="col-md-8">
+								<select id="hourlyWage" th:field="*{shiftType}" class="form-control" >
+									<option value=""></option>
+									<option value="morning">早番</option>
+									<option value="day">日勤</option>
+									<option value="evening">遅番</option>
+									<option value="night">夜勤</option>
+								</select>
+								<small th:if="${#fields.hasErrors('shiftType')}" th:errors="*{shiftType}"></small>
+							</div>
+						</div>
+
+						<div class="form-group row ">
+							<label for="lblRemarks" class="col-auto col-md-3 col-form-label">備考:</label>
+							<div class="col-md-1"></div>
+							<div class="col-md-8">
+									<textarea class="form-control" th:field="*{remark}"></textarea>
+							</div>
+                        </div>
+                        
+                        
+                        
+						<div class="form-group row justify-content-center spacing">
+							<div class="col-md-2">
+								<button type="reset" class="btn btn-secondary btnClear btn-size">クリア</button>
+							</div>
+							<div class="col-md-2">
+								<button type="submit" class="btn btn-success btnPassword btn-size">登録</button>
+							</div>
+                     	</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+
+		<!-- footer-area -->
+		<footer>
+			<div
+				class="row justify-content-center padding-top-15 amber-background"
+				id="copy-right-footer">
+				<p>
+					&copy; Copyright <strong>Bliss Stock</strong>. All Rights Reserved
+				</p>
+			</div>
+		</footer>
+
+
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		crossorigin="anonymous"></script>
+</body>
+
+</html>

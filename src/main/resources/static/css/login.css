@@ -1,0 +1,23 @@
+* {box-sizing: border-box;}
+ .header
+	{
+	color: #1f7b76;
+	align: center;
+	}
+	.title
+	{
+		color: #1f7b76;
+		align: center;
+		
+	}
+.form-signin {
+  width: 80%;
+  max-width: 700px;
+  padding: 10px;
+  margin: auto;
+}
+
+.btnStyle {
+	background-color: #1f7b76;
+	color: white;
+}

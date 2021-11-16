@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extrasspringsecurity4">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+<script
+	src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script
+	src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<script
+	src="https://cdn.jsdelivr.net/gh/xcash/bootstrap-autocomplete@master/dist/latest/bootstrap-autocomplete.min.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+<script src="//code.jquery.com/jquery-1.12.4.js"></script>
+<script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/main-style.css">
+<link rel="stylesheet" type="text/css" href="css/N00018_ShiftRegistrationAndUpdate.css">
+<script type="text/javascript">
+	$(function() {
+		$("#helperName").autocomplete({
+			source : 'helperNameAutoComplete',
+			
+			select: function(event,ui){
+				this.value = ui.item.label;
+				$("#helperId").val(ui.item.value);
+				return false;
+			},
+			
+			focus: function( event, ui ) {
+				this.value = ui.item.label;
+				$("#helperId").val(ui.item.value);
+				return false;
+			}
+		});
+
+	});
+</script>
+<title>老人ホーム支援システム</title>
+</head>
+<body>
+	<!-- navigation-bar-area -->
+	<div class="topnav m-3">
+		<div class="logo-container">
+			<img th:src="@{images/logo.jpg}" class="img-responsive" alt="">
+		</div>
+		<nav class="navbar navbar-expand-md navbar-light">
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item"><a class="nav-link" th:href="@{AdminHome}">ホーム
+					</a></li>
+					<li class="nav-item"><a class="nav-link" th:href="@{PasswordChangeHome}">パスワード変更</a>
+					</li>
+					<li class="nav-item"><a class="nav-link" th:href="@{/logout}">ログアウト</a></li>
+				</ul>
+			</div>
+		</nav>
+	</div>
+	<!-- breadcrumb-area -->
+	<div class="row breadcrumb-default" style="background-color: #1f7b76;">
+		<ul class="breadcrumb">
+			<li><a th:href="@{AdminHome}">ホーム</a></li>
+			<li><a th:href="@{Schedule}">スケジュール</a></li>
+			<li style="color: lightgreen">シフト登録</li>
+			
+		</ul>
+	</div>
+
+	
+<form method="post" th:object="${taskRegister}" th:action="@{/ShiftRegistration}"> 
+<div class="container-fluid">
+ 
+			<div class="row">
+
+				<div class="col-md-3"></div>
+				<div class="col-md-2">
+					<label>担当日付*: </label>	
+				</div>
+
+				<div class="col-md-3">
+					
+					<input type="date" id="date" name="date" th:name="date" class="form-control" th:field="*{date}" required>					
+				</div>
+
+				<div class="col-md-4"></div>
+
+				<div class="col-md-3"></div>
+
+				<div class="col-md-2">
+					<br><label>ヘルパーさん*:</label>
+				</div>
+				<div class="col-md-3">
+				<br><input type="text" id="helperName" name="helperName"
+						class="form-control autocomplete" autocomplete="off"
+						th:name="helperName" onkeypress="javascript:doit_onkeypress(event);" onkeyup="javascript:doit_onkeyup(event)" th:field=*{name} required>
+				<br><input type="hidden" id="helperId" name="helperId"
+						class="form-control autocomplete" autocomplete="off" th:field=*{id}>	
+					
+				</div>
+			</div>	
+		</br>
+	<!-- tab-area -->
+	<div class="container h-80 pb-2">
+		<ul class="nav nav-tabs border-0 " id="myTab" role="tablist">
+		</ul>
+		<div class="ui-page0">
+		<section id="tab0" class="tab-content hide border tab">
+				<label>作業名：</label>
+		    	<div class="activity-tab0 activity-name"></div><br>
+		    	<button type="button" class="btnChoose" data-target="#model0" data-toggle="modal" >高齢者を選択します</button><br>
+	 		 	<div class="row">
+	 		 	<label>高齢者:</label>
+	 		 	<div class="checkedElder1"></div>
+	 		 	</div>
+	 		 	<div class="form-group w-50">
+	 		 	<label>備考:</label>
+	  			<textarea class="form-control remarks" aria-label="備考:" name="txtRemarks" rows="5" th:field="*{adminRemark0}"></textarea><br>
+	  			<div class="row">
+	  			<div class="btn-group">
+	  			</div>
+	  			</div>
+	  			</div>
+	  	</section>
+		</div>
+		<div class="ui-page1">
+		<section id="tab1" class="tab-content hide border">
+				<label>作業名：</label>
+		    	<div class="activity-tab1 activity-name"></div><br>
+		    	<button type="button" class="btnChoose" data-target="#model1" data-toggle="modal" >高齢者を選択します</button><br>
+	 		 	<div class="row">
+	 		 	<label>高齢者:</label>
+	 		 	<div class="checkedElder2"></div>
+	 		 	</div>
+	 		 	<div class="form-group w-50">
+	 		 	<label>備考:</label>
+	  			<textarea class="form-control remarks" aria-label="備考:" name="txtRemarks" rows="5" th:field="*{adminRemark1}"></textarea><br>
+	  			<div class="row">
+	  			<div class="btn-group">
+	  			</div>
+	  			</div>
+	  		   </div>
+	  	</section>
+		</div>
+		<div class="ui-page2">
+			<section id="tab2" class="tab-content hide border">
+				<label>作業名：</label>
+		    	<div class="activity-tab2 activity-name"></div><br>
+		    	<button type="button" class="btnChoose" data-target="#model2" data-toggle="modal" >高齢者を選択します</button><br>
+	 		 	<div class="row">
+	 		 	<label>高齢者:</label>
+	 		 	<div class="checkedElder3"></div>
+	 		 	</div>
+	 		 	<div class="form-group w-50">
+	 		 	<label>備考:</label>
+	  			<textarea class="form-control remarks" aria-label="備考:" name="txtRemarks" rows="5" th:field="*{adminRemark2}"></textarea><br>
+	  			<div class="row">
+	  			<div class="btn-group">
+	  			</div>
+	  			</div>
+	  		    </div>
+	  		</section>
+	   	</div>
+		
+		<div class="ui-page3">
+		<section id="tab3" class="tab-content hide border">
+				<label>作業名：</label>
+		    	<div class="activity-tab3 activity-name"></div><br>
+		    	<button type="button" class="btnChoose" data-target="#model3" data-toggle="modal" >高齢者を選択します</button><br>
+	 		 	<div class="row">
+	 		 	<label>高齢者:</label>
+	 		 	<div class="checkedElder4"></div>
+	 		 	</div>
+	 		 	<div class="form-group w-50">
+	 		 	<label>備考:</label>
+	  			<textarea class="form-control remarks" aria-label="備考:" name="txtRemarks" rows="5" th:field="*{adminRemark3}"></textarea><br>
+	  			<div class="row">
+	  			<div class="btn-group">
+	  			</div>
+	  			</div>
+	  			</div>
+	  	</section>
+	  	</div>
+		<div class="ui-page-other">
+		<section id="tab" class="tab-content hide border"> 
+		    	<label>作業名: </label><input type="text" name="txtactivity" id="txtactivity" class="tab-textbox" th:field="*{otherActivityName}"><br>
+		    	<label class="pr-3">開始時間: </label><input type="time" name="txtstart" id="txtstart" th:field="*{otherStartTime}"><br>
+		    	<label class="pr-3">終了時間: </label><input type="time" name="txtend" id="txtend" th:field="*{otherEndTime}"><br>
+		        <button type="button" class="btnChoose" data-target="#other" data-toggle="modal"  >高齢者を選択します</button><br>
+	 		 	<div class="row">
+	 		 	<label>高齢者:</label>
+	 		 	<div class="checkedElder5"></div>
+	 		 	</div>
+	 		 	<div class="form-group w-50">
+	 		 	<label>備考:</label>
+	 		 	<textarea class="form-control remarks" aria-label="備考:" name="txtRemarks" rows="5" th:field="*{otherRemark}"></textarea><br>
+	 		 	<div class="row">
+	 		 	<div class="btn-group">	 		 	
+	  			</div>
+	  			</div>
+	  		</div>
+	  		</section>
+		</div>
+		
+	
+		<!-- <div class="btn-group submit-buttons"> -->
+	  	</div>
+		<!-- modal -->
+		<form method="post" th:object="${taskInfo}" th:action="@{/ShiftRegistration}">	
+			<div>
+				<div class="modal fade" id="model0" tabindex="-1" role="dialog"
+					aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 class="modal-title" id="exampleModalLabel">高齢者の一覧</h4>
+							</div>
+							<div class="modal-body">
+								<ul class="elderList">
+									<li th:each="allElderList: ${allElderList}"><input
+										type="checkbox" class="elderNameList1" th:value="${allElderList.elderId}"
+										th:field="*{checkedFirstShift}"><label
+										th:text="${allElderList.firstName+' '+allElderList.lastName}"></label></li>
+								</ul>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-info" data-dismiss="modal" id="chkbox1">送信</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal fade" id="model1" tabindex="-1" role="dialog"
+					aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 class="modal-title" id="exampleModalLabel">高齢者の一覧</h4>
+							</div>
+							<div class="modal-body">
+								<ul class="elderList">
+									<li th:each="allElderList: ${allElderList}"><input
+										type="checkbox" class="elderNameList2" th:value="${allElderList.elderId}"
+										th:field="*{checkedSecondShift}"><label
+										th:text="${allElderList.firstName+' '+allElderList.lastName}"></label></li>
+								</ul>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-info" data-dismiss="modal" id="chkbox2">送信</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal fade" id="model2" tabindex="-1" role="dialog"
+					aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 class="modal-title" id="exampleModalLabel">高齢者の一覧</h4>
+							</div>
+							<div class="modal-body">
+								<ul class="elderList">
+									<li th:each="allElderList: ${allElderList}"><input
+										type="checkbox" class="elderNameList3" th:value="${allElderList.elderId}"
+										th:field="*{checkedThirdShift}"><label
+										th:text="${allElderList.firstName+' '+allElderList.lastName}"></label></li>
+								</ul>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-info" data-dismiss="modal" id="chkbox3">送信</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal fade" id="model3" tabindex="-1" role="dialog"
+					aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 class="modal-title" id="exampleModalLabel">高齢者の一覧</h4>
+							</div>
+							<div class="modal-body">
+								<ul class="elderList">
+									<li th:each="allElderList: ${allElderList}"><input
+										type="checkbox" class="elderNameList4" th:value="${allElderList.elderId}"
+										th:field="*{checkedForthShift}"><label
+										th:text="${allElderList.firstName+' '+allElderList.lastName}"></label></li>
+								</ul>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-info" data-dismiss="modal" id="chkbox4">送信</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal fade" id="other" tabindex="-1" role="dialog"
+					aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 class="modal-title" id="exampleModalLabel">高齢者の一覧</h4>
+							</div>
+							<div class="modal-body">
+								<ul class="elderList">
+									<li th:each="allElderList: ${allElderList}"><input
+										type="checkbox" class="elderNameList5" th:value="${allElderList.elderId}"
+										th:field="*{checkedOtherActivity}"><label
+										th:text="${allElderList.firstName+' '+allElderList.lastName}"></label></li>
+								</ul>
+								
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-info" data-dismiss="modal" id="chkbox5">送信</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			 </div>			 
+			<div class="buttons"></div>
+		</form>	
+	</div>
+</form>
+	<script type="text/javascript"
+		src="js/N00018_ShiftRegistrationAndUpdate.js"></script>
+	<script>
+		$(document).ready(function() {
+		});
+	</script>
+	<!-- footer-area -->
+	<footer>
+            <div class="row justify-content-center padding-top-15 amber-background" id="copy-right-footer">
+                <p>&copy; Copyright <strong>Bliss Stock</strong>. All Rights Reserved</p>
+            </div>
+        </footer>
+
+</body>
+</html>

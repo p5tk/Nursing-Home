@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extrasspringsecurity4">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <!-- Title -->
+    <title>老人ホーム支援システム</title>
+    <link rel="shortcut icon" type="image/png" href="img/logo.png" />
+
+    <!-- Bootstrap CSS File -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/main-style.css">
+    <link rel="stylesheet" href="css/N00006_TaskDetails.css">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <!-- navigation-bar-area -->
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <img class="img-responsive" th:src="@{images/logo.jpg}">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item ">
+                        <a class="nav-link" th:href="@{AdminOrHelperHome}" >ホーム </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/passwordChangeHome}">パスワード変更</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link"th:href="@{/logout}">ログアウト</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- breadcrumb-area -->
+        <div class="bc-icons-2">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb amber-background">
+                    <li class="breadcrumb-item"><a class="black-text" href="#" th:href="@{AdminOrHelperHome}">ホーム</a><i
+                            class="fa fa-angle-right mx-4"></i></li>
+                    <li class="breadcrumb-item"><a class="black-text" href="#" th:href="@{AdminOrHelperSchedule}">スケジュール</a><i
+                            class="fa fa-angle-right mx-4" aria-hidden="true"></i></li>
+                    <li class="breadcrumb-item active">作業詳細</li>
+                </ol>
+            </nav>
+        </div>
+
+        <!-- User-form-area -->
+        <div sec:authorize="hasAuthority('USER')">
+        <form method="post" th:action ="@{'/updateTaskDetails/?taskId='+${taskInfo.Id}}" th:object="${taskInfo}">
+        <div class="row" style="padding-bottom: 50px">
+        <div class="col-md-1"></div>
+		<div class="col-md-3">
+			<label>ヘルパーさん :[[${helperName}]]</label><br>
+			<label class="elder">高齢者：</label>
+			<ul class="elderList">
+			<li th:each="elderName:${elderNameList}">
+			<label th:text="${elderName}"></label>
+			</li>
+			</ul><br>
+			<label>担当日付 :[[${taskInfo.assignedDate}]]</label><br>
+			<label>担当時間 :[[${startTime}]]-[[${endTime}]]</label><br>
+			<label>シフト種類 :[[${shiftType}]]</label><br>
+			<label>作業名:[[${taskInfo.title}]]</label><br>
+			<label>備考 :</label>
+			<textarea class="form-control" aria-label="備考 " name="txtRemarks" rows="5" th:field=*{helperTaskRemark}></textarea>
+		</div>
+		<div class="col-md-3"></div>
+		<div class="col-md-3">
+	
+			<fieldset class="form-group">
+    		<legend class="col-form-label pt-0">タスクステータス :</legend>
+        	<div class="form-check">
+          		<input class="form-check-input" type="radio" name="taskStatus" id="gridRadios1" value="未" th:field="*{taskStatus}" th:disabled="${taskInfo.taskStatus eq '完' or taskInfo.taskStatus eq '中' or taskInfo.taskStatus eq '中止'}" required>
+          		<label class="form-check-label" for="gridRadios1">
+            	未
+          		</label>
+        	</div>
+        	<div class="form-check">
+          		<input class="form-check-input" type="radio" name="taskStatus" id="gridRadios2" value="中" th:field="*{taskStatus}" th:disabled="${taskInfo.taskStatus eq '完' or taskInfo.taskStatus eq '中止'}">
+         		<label class="form-check-label" for="gridRadios2">
+            	中
+          		</label>
+        	</div>
+        	<div class="form-check">
+          		<input class="form-check-input" type="radio" name="taskStatus" id="gridRadios3" value="完" th:field="*{taskStatus}" th:disabled="${taskInfo.taskStatus eq '中止'}">
+          		<label class="form-check-label" for="gridRadios3">
+            	完
+          		</label>
+        	</div>
+        	<div class="form-check">
+          		<input class="form-check-input" type="radio" name="taskStatus" id="gridRadios4" value="中止" th:field="*{taskStatus}">
+          		<label class="form-check-label" for="gridRadios4">
+            	中止
+          		</label>          		
+        	</div> 
+  		 </fieldset>
+  	
+			<label>管理者の備考 :[[${taskInfo.adminTaskRemark}]] </label>
+			
+		<div class="col-md-2"></div>
+	  </div>
+	 </div>
+	   <!-- button-area -->
+	      <div class="row spacing">
+	      	<div class="col-md-5"></div>
+	       		<div class="col-md-4">
+	  				<div class="btn-group" style="padding-bottom: 30px;">
+	  					<button type="button"  id="btnBack" class="btn btn-spacing btn-secondary">戻る</button>
+	  					<button type="submit" id="btnSubmit" class="btn btn-spacing btn-success">提出</button>
+	  				</div>
+	  			</div>
+	  		</div>
+		</form>
+	  	</div>
+	  	<!-- Admin-form-area -->
+	  	<div sec:authorize="hasAuthority('ADMIN')">
+	  	<form method="post" th:action ="@{/postTaskDetails}" th:object="${taskInfo}">
+        <div class="row" style="padding-bottom: 50px">
+        <input type="hidden" th:field="*{id}">
+        <input type="hidden" th:field="*{helperInfo.helperId}">
+        <div class="col-md-2"></div>
+		<div class="col-md-8">
+		 <div class="form-group row ">
+				<label  class="col-md-3 col-form-label">ヘルパーさん :</label> 
+				<div class="col-md-8">
+				<label class="col-form-label">[[${helperName}]]</label>				
+				</div>
+		</div>
+		<div class="form-group row ">
+			<label class="elder col-md-3 col-form-label">高齢者*：</label>
+			<div class="col-md-8 col-form-label">
+			<div class="checkedElder" id="checkedElder">
+			<ul class="elderList">
+			<li th:each="elderName:${elderNameList}">
+			<label th:text="${elderName}"></label>			
+			</li>			
+			</ul></div>
+			</div>
+		</div>
+		<div class="form-group row ">
+		<div class="col-md-3"></div>
+		<div class="col-md-8">
+		<button type="button" class="btnChoose" data-target="#model" data-toggle="modal" >高齢者を選択します</button>
+		</div>
+		</div>
+		<div class="form-group row ">
+			<label class="col-md-3 col-form-label">担当日付*:</label> 
+				<div class="col-md-8">
+					<input type="date" class="form-control" th:field="*{assignedDate}" id="assignedDate" placeholder="担当日付" readonly>
+				</div>
+		</div>
+		<div class="form-group row ">
+			<label class="col-md-3 col-form-label">担当時間* :</label> 
+				<div class="col-md-4">
+					<input type="datetime-local" class="form-control" th:field="*{start}" id="startTime" placeholder="担当時間" readonly>					
+				</div>
+				<div class="col-md-4">
+					<input type="datetime-local" class="form-control" th:field="*{finish}" id="finishTime" placeholder="担当時間" readonly>
+				</div>				
+		</div>		
+		<div class="form-group row ">
+			<label class="col-md-3 col-form-label">シフト種類* :</label> 
+			<div class="col-md-8 col-form-label">
+			<label>[[${helperInfo.shiftType}]]</label>				
+			</div>
+		</div>
+		<div class="form-group row ">
+			<label class="col-md-3 col-form-label">作業名:</label> 
+				<div class="col-md-8">
+				<input type="text" class="form-control" th:field="*{title}" id="activity" placeholder="作業名">
+				<small th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></small>
+				<small th:text="${activityErr}"></small>
+				</div>				
+		</div>
+		<div class="form-group row ">
+				<label  class="col-md-3 col-form-label">備考 :</label> 
+				<div class="col-md-6">
+				<textarea class="form-control" aria-label="備考 " name="txtRemarks" rows="5" th:field=*{adminTaskRemark} ></textarea>				
+				</div>
+		</div>
+		<div class="form-group row ">
+			<input type="hidden" th:field="*{taskStatus}">
+			<label class="col-md-3 col-form-label">タスクステータス :</label> 
+			<div class="col-md-8 col-form-label">
+			<label> [[${taskInfo.taskStatus}]]</label>				
+			</div>
+		</div>
+		<div class="form-group row ">
+			<input type="hidden" th:field="*{helperTaskRemark}">
+			<label class="col-md-3 col-form-label">ヘルパーさんの備考 :</label> 
+			<div class="col-md-8 col-form-label">
+			<label> [[${taskInfo.helperTaskRemark}]]</label>				
+			</div>
+		</div>	
+		</div>
+	 </div>	
+	 <div class="col-md-2"></div>	
+	  	 <!-- button-area -->
+	      <div class="row" style="padding-bottom:30px;">
+	      	<div class="col-md-5"></div>
+	       		<div class="col-md-4">
+	  				<div class="btn-group spacing">
+	  					<button type="button"  id="btnBack" class="btn btn-spacing btn-secondary">戻る</button>
+	  					<button type="submit" id="btnSubmitAdmin" class="btn btn-spacing btn-success">編集</button>
+	  				</div>
+	  			</div>
+	  		</div>
+	  
+	  <!-- Modal-area -->
+	  <div class="modal fade" id="model" tabindex="-1" role="dialog"
+					aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 class="modal-title" id="exampleModalLabel">高齢者の一覧</h4>
+							</div>
+							<div class="modal-body">
+								<ul class=elderModalList>
+									<li th:each="allElderList: ${allElderList}">
+										<input type="checkbox" name="elderNameList" th:value="${allElderList.elderId}" th:field="*{checkedElders}" class="elderCheckedList">
+										<label th:text="${allElderList.firstName+' '+allElderList.lastName}" ></label></li>
+								</ul>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-info" data-dismiss="modal"id="chkbutton">送信</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+        <!-- footer-area -->
+        <footer>
+            <div class="row justify-content-center padding-top-15 amber-background" id="copy-right-footer">
+                <p>&copy; Copyright <strong>Bliss Stock</strong>. All Rights Reserved</p>
+            </div>
+        </footer>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script src="main-js.js"></script>
+    <script type= text/javascript>
+    
+    $("#btnBack").click(function(){
+	 		window.history.back();
+	});
+	
+	$(document).ready(function () {
+	    $('#chkbutton').click(function() {
+	      checked = $(".elderCheckedList:checkbox:checked").length;
+
+	      if(!checked) {
+	        alert("高齢者を一人以上選択してください！");
+	        return false;
+	      }
+	     
+	      var elderList= [];	
+	       $.each($('.elderCheckedList:checked'), function(){            
+	           elderList.push($(this).parent().find("label").text());
+	      });
+	     
+    	  $('.checkedElder').text(elderList.join(", "));
+    	  
+	    });
+	    
+	});
+	
+	$('#btnSubmitAdmin').click(function() {
+		 checked = $(".elderCheckedList:checkbox:checked").length;
+
+	      if(!checked) {
+	        alert("Please choose one or more elders!");
+	        return false;
+	      }
+	});
+	</script>
+</body>
+</html>

@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extrasspringsecurity4">
+
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  
+   <link rel="stylesheet" href="/css/main-style.css">
+   <link rel="stylesheet" href="/css/daily-condition.css">
+<title>老人ホーム支援システム</title>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light">
+            <a class="navbar-brand" th:href="@{AdminOrHelperHome}"><img class="img-responsive" th:src="@{images/logo.jpg}"></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/AdminOrHelperHome}">ホーム</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/PasswordChangeHome}">パスワード変更</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/logout}">ログアウト</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- breadcrumb-area -->
+        <div class="bc-icons-2">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb amber-background">
+                    <li class="breadcrumb-item"><a class="black-text" th:href="@{/AdminOrHelperHome}">ホーム</a><i
+                            class="fa fa-angle-right mx-4"></i></li>
+                   <!--  <li class="breadcrumb-item"><a class="black-text" th:href="@{/getDailyRecordList}">毎日状況一覧</a><i class="fa fa-angle-right mx-4" aria-hidden="true"></i></li> -->
+                    <li class="breadcrumb-item active"><a class="black-text">毎日状況追加</a>
+                        <i aria-hidden="true"></i></li>
+                        
+                       
+               			 <h5 th:inline="text" style="margin-left: 80%">[[${userName}]]</h5>        	
+                        
+                </ol>
+                
+            </nav>
+        </div>
+
+    <div class="container-fluid">
+       
+
+
+        <form action="/DailyConditionIndividualPost" method="post" th:object="${drObj}">
+
+            <div class="row mb-3">
+
+                <div class="col-lg-3">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <label>日付</label>
+                        </div>
+                        <div class="col-lg-8">
+                            <input type="date" class="form-control" th:field="*{date}" name="date" required>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-lg-5">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <label>高齢者の名前</label>
+                        </div>
+                        <div class="col-lg-6">
+                              <select th:field="*{elder}" class="form-control"  name="elder" required>
+			                      <option value=""></option>
+			                      <option th:each="elder : ${elderListObj}"
+			                            th:value="${elder.elderId}"
+			                            th:utext="${elder.firstName}+' '+${elder.lastName}"/>
+			                  </select><br>
+			                  <small th:text="${recordExistErr}"></small>
+			                  
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-2">
+                	<input type="submit" value="登録前の確認" class="btn btnStyle" name="checkRecord">
+                </div>
+                
+                <div class="col-lg-2" sec:authorize="hasAuthority('ADMIN')">
+                	<a th:href="@{/initialPage}" class="btn btnStyle">一括入力</a>
+                </div>
+            </div>
+
+			<div class="row">
+                <div class="col-lg-4">
+                    <div class="row">
+                        <div class="col-lg-1"></div>
+                        <div class="col-lg-11">
+                            <p class="categoryTitle">カテゴリー： バイタルデータ入力</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3" style="padding-bottom: 1%">
+
+			    <div class="col-lg-1"></div>
+			
+			    <div class="col-lg-2" style="padding-top: 2%">
+			        <center>
+			            <p class="colBG">体温</p>
+			        </center>
+			        <div class="row">
+			
+			            <div class="col-lg-6">
+			                <center>
+			                    <p>AM</p>
+			                </center>
+			                <center>
+			                    <p>C</p>
+			                </center>
+			                <input type="number" step="0.1" min="0" max="100" class="form-control" th:field="*{vital.btAM}">
+			            </div>
+			            <div class="col-lg-6">
+			                <center>
+			                    <p>PM</p>
+			                </center>
+			                <center>
+			                    <p>C</p>
+			                </center>
+			                <input type="number" step="0.1" min="0" max="100" class="form-control" th:field="*{vital.btPM}">
+			            </div>
+			
+			        </div>
+			
+			    </div>
+			
+			
+			
+			    <div class="col-lg-2" style="padding-top: 2%">
+			        <center>
+			            <p class="colBG">血圧</p>
+			        </center>
+			        <div class="row">
+			
+			
+			            <div class="col-lg-6">
+			
+			                <center>
+			                    <p>AM</p>
+			                </center>
+			                <p>上</p>
+			                <input type="number" class="form-control" th:field="*{vital.bpAMUpper}">
+			                <p>下</p>
+			                <input type="number" class="form-control" th:field="*{vital.bpAMLower}">
+			            </div>
+			            <div class="col-lg-6">
+			                <center>
+			                    <p>PM</p>
+			                </center>
+			                <p>上</p>
+			                <input type="number" class="form-control" th:field="*{vital.bpPMUpper}">
+			                <p>下</p>
+			                <input type="number" class="form-control" th:field="*{vital.bpPMLower}">
+			            </div>
+			        </div>
+			
+			    </div>
+			
+			    <div class="col-lg-1" style="padding-top: 2%">
+			        <center>
+			            <p class="colBG">体重</p>
+			        </center>
+			        <div class="row">
+			            <div class="col-lg-12">
+			                <p>.
+			                <p>
+			                    <center>
+			                        <p>kg</p>
+			                    </center>
+			                    <input type="number" class="form-control" th:field="*{vital.bodyWeight}">
+			            </div>
+			        </div>
+			    </div>
+			
+			    <div class="col-lg-3" style="padding-top: 2%">
+			        <center>
+			            <p class="colBG">おしっこ</p>
+			        </center>
+			        <div class="row">
+			            <div class="col-lg-6">
+			                <p>.</p>
+			                <center>
+			                    <p>合計(ml)</p>
+			                </center>
+			                <input type="number" class="form-control" th:field="*{vital.peeMl}" id="peeMl">
+			            </div>
+			            <div class="col-lg-6">
+			                <p>.</p>
+			                <center>
+			                    <p>回数</p>
+			                </center>
+			                <div class="input-group">
+			                	<input type="number" class="form-control" th:field="*{vital.peeTimes}" id="peeTimes">
+			                
+			                </div> 
+			            </div>
+			        </div>
+			    </div>
+			
+			    <div class="col-lg-3" style="padding-top: 2%">
+			        <center>
+			            <p class="colBG">うんち</p>
+			        </center>
+			        <div class="row">
+			            <div class="col-lg-6">
+			                <p>.</p>
+			                <center>
+			                    <p>量</p>
+			                </center>
+			                <input type="text" class="form-control" th:field="*{vital.poopVolume}" id="poopVolume">
+			            </div>
+			            <div class="col-lg-6">
+			                <p>.</p>
+			                <center>
+			                    <p>回数</p>
+			                </center>
+			                <div class="input-group">
+			                	<input type="number" class="form-control" th:field="*{vital.poopTimes}" id="poopTimes">
+			                </div>
+			            </div>
+			        </div>
+			    </div>
+			
+			    <div class="col-lg-1"></div>
+			</div>
+
+			<div class="row">
+			<div class="col-lg-4">
+			        <div class="row">
+			            <div class="col-lg-1"></div>
+			            <div class="col-lg-11">
+			                <p class="categoryTitle">カテゴリー：食事データ入力</p>
+			            </div>
+			        </div>
+			    </div>
+			</div>
+			<div class="row">
+			    <div class="col-lg-1">
+			    </div>
+			    <div class="col-lg-11">
+			        <p>朝食</p>
+			    </div>
+			</div>
+			
+			<div class="row" style="padding-bottom: 1%">
+			
+			    <div class="col-lg-1"></div>
+			    <div class="col-lg-3" style="padding-top: 2%">
+			        <center>
+			            <p class="colBG">主食</p>
+			        </center>
+			        <div class="row">
+			            <div class="col-lg-6">
+			                <p>名</p>
+			                <input type="text" class="form-control" th:field="*{meal.breakfastSFName}">
+			            </div>
+			            <div class="col-lg-6">
+			                <p>消費量</p>
+			                <select class="form-control"
+			                    th:field="*{meal.breakfastSFAmount}">
+			                    <option th:each="eachAmt:${foodAmountList}" th:text="${eachAmt}" th:value="${eachAmt}"></option>
+			                </select>
+			            </div>
+			        </div>
+			    </div>
+			    <div class="col-lg-3" style="padding-top: 2%">
+			        <center>
+			            <p class="colBG">副菜</p>
+			        </center>
+			        <div class="row">
+			            <div class="col-lg-6">
+			                <p>名</p>
+							<input type="text" class="form-control" th:field="*{meal.breakfastSDName}">
+			            </div>
+			            <div class="col-lg-6">
+			                <p>消費量</p>
+			
+			                <select class="form-control"
+			                    th:field="*{meal.breakfastSDAmount}">
+			                 	<option th:each="eachAmt:${foodAmountList}" th:text="${eachAmt}" th:value="${eachAmt}"></option>
+			                    
+			                 </select>
+			            </div>
+			        </div>
+			    </div>
+			    <div class="col-lg-3" style="padding-top: 2%">
+			        <center>
+			            <p class="colBG">スープ</p>
+			        </center>
+			        <div class="row">
+			            <div class="col-lg-6">
+			                <p>名</p>
+							<input type="text" class="form-control" th:field="*{meal.breakfastSoupName}">
+			            </div>
+			            <div class="col-lg-6">
+			                <p>消費量</p>
+			
+			                <select class="form-control"
+			                    th:field="*{meal.breakfastSoupAmount}">
+			                    <option th:each="eachAmt:${foodAmountList}" th:text="${eachAmt}" th:value="${eachAmt}"></option>
+			                </select>
+			            </div>
+			        </div>
+			    </div>
+			    <div class="col-lg-2" style="padding-top: 2%">
+			        <center>
+			            <p class="colBG">観察内容</p>
+			        </center>
+			        <div class="row">
+			            <div class="col">
+			                <p>.</p>
+			                <input type="text" class="form-control"
+			                    th:field="*{meal.breakfasObservationContent}">
+			            </div>
+			        </div>
+			    </div>
+			</div>
+			
+			<div class="row">
+			    <div class="col-lg-1">
+			    </div>
+			    <div class="col-lg-11">
+			        <p>昼食</p>
+			    </div>
+			</div>
+			
+			<div class="row" style="padding-bottom: 1%">
+			
+			    <div class="col-lg-1"></div>
+			    <div class="col-lg-3" style="padding-top: 2%">
+			        <center>
+			            <p class="colBG">主食</p>
+			        </center>
+			        <div class="row">
+			            <div class="col-lg-6">
+			                <p>名</p>
+							<input type="text" class="form-control" th:field="*{meal.lunchSFName}">
+			            </div>
+			            <div class="col-lg-6">
+			                <p>消費量</p>
+			
+			                <select class="form-control" th:field="*{meal.lunchSFAmount}">
+			                	<option th:each="eachAmt:${foodAmountList}" th:text="${eachAmt}" th:value="${eachAmt}"></option>
+			                </select>
+			            </div>
+			        </div>
+			    </div>
+			    <div class="col-lg-3" style="padding-top: 2%">
+			        <center>
+			            <p class="colBG">副菜</p>
+			        </center>
+			        <div class="row">
+			            <div class="col-lg-6">
+			                <p>名 </p>
+							<input type="text" class="form-control" th:field="*{meal.lunchSDName}">
+			            </div>
+			            <div class="col-lg-6">
+			                <p>消費量</p>
+			
+			                <select class="form-control" th:field="*{meal.lunchSDAmount}">
+			                	<option th:each="eachAmt:${foodAmountList}" th:text="${eachAmt}" th:value="${eachAmt}"></option>
+			                </select>
+			            </div>
+			        </div>
+			    </div>
+			    <div class="col-lg-3" style="padding-top: 2%">
+			        <center>
+			            <p class="colBG">スープ</p>
+			        </center>
+			        <div class="row">
+			            <div class="col-lg-6">
+			                <p>名</p>
+							<input type="text" class="form-control" th:field="*{meal.lunchSoupName}">
+			            </div>
+			            <div class="col-lg-6">
+			                <p>消費量</p>
+			
+			                <select class="form-control"
+			                    th:field="*{meal.lunchSoupAmount}">
+			                    <option th:each="eachAmt:${foodAmountList}" th:text="${eachAmt}" th:value="${eachAmt}"></option>
+			                </select>
+			            </div>
+			        </div>
+			    </div>
+			    <div class="col-lg-2" style="padding-top: 2%">
+			        <center>
+			            <p class="colBG">観察内容</p>
+			        </center>
+			        <div class="row">
+			            <div class="col">
+			                <p>.</p>
+			                <input type="text" class="form-control"
+			                    th:field="*{meal.lunchObservationContent}">
+			            </div>
+			        </div>
+			    </div>
+			</div>
+			
+			<div class="row">
+			    <div class="col-lg-1">
+			    </div>
+			    <div class="col-lg-11">
+			        <p>夕食</p>
+			    </div>
+			</div>
+			
+			<div class="row" style="padding-bottom: 1%">
+			
+			    <div class="col-lg-1"></div>
+			    <div class="col-lg-3" style="padding-top: 2%">
+			        <center>
+			            <p class="colBG">主食</p>
+			        </center>
+			        <div class="row">
+			            <div class="col-lg-6">
+			                <p>名</p>
+			                <input type="text" class="form-control" th:field="*{meal.dinnerSFName}">
+			            </div>
+			            <div class="col-lg-6">
+			                <p>消費量</p>
+			                <select class="form-control" th:field="*{meal.dinnerSFAmount}">
+			                	<option th:each="eachAmt:${foodAmountList}" th:text="${eachAmt}" th:value="${eachAmt}"></option>
+			                </select>
+			            </div>
+			        </div>
+			    </div>
+			    <div class="col-lg-3" style="padding-top: 2%">
+			        <center>
+			            <p class="colBG">副菜</p>
+			        </center>
+			        <div class="row">
+			            <div class="col-lg-6">
+			                <p>名</p>
+							<input type="text" class="form-control" th:field="*{meal.dinnerSDName}">
+			            </div>
+			            <div class="col-lg-6">
+			                <p>消費量</p>
+			
+			                <select class="form-control" th:field="*{meal.dinnerSDAmount}">
+			                	<option th:each="eachAmt:${foodAmountList}" th:text="${eachAmt}" th:value="${eachAmt}"></option>
+			                </select>
+			            </div>
+			        </div>
+			    </div>
+			    <div class="col-lg-3" style="padding-top: 2%">
+			        <center>
+			            <p class="colBG">スープ</p>
+			        </center>
+			        <div class="row">
+			            <div class="col-lg-6">
+			                <p>名</p>
+							<input type="text" class="form-control" th:field="*{meal.dinnerSoupName}">
+			            </div>
+			            <div class="col-lg-6">
+			                <p>消費量</p>
+			
+			                <select class="form-control"
+			                    th:field="*{meal.dinnerSoupAmount}">
+			                	<option th:each="eachAmt:${foodAmountList}" th:text="${eachAmt}" th:value="${eachAmt}"></option>    
+			                </select>
+			            </div>
+			        </div>
+			    </div>
+			    <div class="col-lg-2" style="padding-top: 2%">
+			        <center>
+			            <p class="colBG">観察内容</p>
+			        </center>
+			        <div class="row">
+			            <div class="col">
+			                <p>.</p>
+			                <input type="text" class="form-control"
+			                    th:field="*{meal.dinnerObservationContent}">
+			            </div>
+			        </div>
+			    </div>
+			</div>
+			
+			<div class="row">
+			    <div class="col-lg-4">
+			        <div class="row">
+			            <div class="col-lg-1"></div>
+			            <div class="col-lg-11">
+			                <p class="categoryTitle">カテゴリー：食事（おやつ）データ入力</p>
+			            </div>
+			        </div>
+			    </div>
+			</div>
+			
+			<div class="row" style="padding-bottom: 1%">
+			    <div class="col-lg-1"></div>
+			    <div class="col-lg-3" style="padding-top: 2%">
+			        <center>
+			            <p class="colBG">おやつ</p>
+			        </center>
+			        <div class="row">
+			            <div class="col-lg-6">
+			                <p>名</p>
+							<input type="text" class="form-control" th:field="*{snack.snackName}">
+			            </div>
+			            <div class="col-lg-6">
+			                <p>消費量</p>
+			
+			                <select class="form-control"
+			                    th:field="*{snack.snackConsumptionAmount}">
+			                	<option th:each="eachAmt:${foodAmountList}" th:text="${eachAmt}" th:value="${eachAmt}"></option>    
+			                </select>
+			            </div>
+			        </div>
+			    </div>
+			    <div class="col-lg-4" style="padding-top: 2%">
+			        <center>
+			            <p class="colBG">飲料</p>
+			        </center>
+			        <div class="row">
+			            <div class="col-lg-6">
+			                <p>名</p>
+							<input type="text" class="form-control" th:field="*{snack.drinkNmae}">
+			            </div>
+			            <div class="col-lg-6">
+			                <p>消費量</p>
+			
+			                <select class="form-control"
+			                    th:field="*{snack.drinkConsumptionAmount}">
+			                	<option th:each="eachAmt:${foodAmountList}" th:text="${eachAmt}" th:value="${eachAmt}"></option>    
+			                </select>
+			            </div>
+			        </div>
+			    </div>
+			    <div class="col-lg-4" style="padding-top: 2%">
+			        <center>
+			            <p class="colBG">観察内容</p>
+			        </center>
+			        <div class="row">
+			            <div class="col">
+			                <p>.</p>
+			                <input type="text" class="form-control"
+			                    th:field="*{snack.observationContent}">
+			            </div>
+			        </div>
+			    </div>
+			</div>
+			
+			<div class="row">
+			    <div class="col-lg-4">
+			        <div class="row">
+			            <div class="col-lg-1"></div>
+			            <div class="col-lg-11">
+			                <p class="categoryTitle">カテゴリー：投薬データ入力</p>
+			            </div>
+			        </div>
+			    </div>
+			</div>
+			
+			<div class="row mb-3">
+			    <div class="col-lg-1"></div>
+			    <div class="col-lg-5">
+			        <center>
+			            <p class="colBG">薬名・消費量・回数</p>
+			        </center>
+			    </div>
+			    <div class="col-lg-6">
+			        <center>
+			            <p class="colBG">観察内容</p>
+			        </center>
+			    </div>
+			</div>
+			<div class="row mb-3">
+			    <div class="col-lg-1"></div>
+			    <div class="col-lg-5">
+			        <textarea rows="3" cols="10" class="form-control" placeholder="Paracetamol/1/1"
+			            th:field="*{medication.medicineName}"></textarea>
+			    </div>
+			    <div class="col-lg-6">
+			        <textarea  rows="3" cols="10" class="form-control" placeholder="異常はありません"
+			            th:field="*{medication.medicationObservation}"></textarea>
+			    </div>
+			</div>	
+			
+
+			<div class="row">
+			    <div class="col-lg-4">
+			        <div class="row">
+			            <div class="col-lg-1"></div>
+			            <div class="col-lg-11">
+			                <p class="categoryTitle">カテゴリー：パーソナルケアデータ入力</p>
+			            </div>
+			        </div>
+			    </div>
+			</div>
+			
+			<div class="row" style="padding-bottom: 1%">
+			    <div class="col-lg-1"></div>
+			    <div class="col-lg-4" style="padding-top: 2%">
+			        <center>
+			            <p class="colBG">口腔ケア</p>
+			        </center>
+			        <div class="row">
+			            <div class="col-lg-6">
+			                <center>
+			                    <p>AM</p>
+			                </center>
+			                <textarea rows="3" cols="10" class="form-control"
+			                    th:field="*{personalCare.oralCareAM}"></textarea>
+			            </div>
+			            <div class="col-lg-6">
+			                <center>
+			                    <p>PM</p>
+			                </center>
+			                <textarea rows="3" cols="10"class="form-control"
+			                    th:field="*{personalCare.oralCarePM}"></textarea>
+			            </div>
+			        </div>
+			    </div>
+			    <div class="col-lg-4" style="padding-top: 2%">
+			        <center>
+			            <p class='colBG'>入浴</p>
+			        </center>
+			        <div class="row">
+			            <div class="col">
+			                <center>
+			                    <p>観察内容</p>
+			                </center>
+			                <textarea rows="3" cols="10"class="form-control"
+			                    th:field="*{personalCare.bathing}"></textarea>
+			            </div>
+			        </div>
+			    </div>
+			    <div class="col-lg-3" style="padding-top: 2%">
+			        <center>
+			            <p class='colBG'>運動</p>
+			        </center>
+			        <div class="row">
+			            <div class="col">
+			                <center>
+			                    <p>観察内容</p>
+			                </center>
+			                <textarea rows="3" cols="10"class="form-control"
+			                    th:field="*{personalCare.exercise}"></textarea>
+			            </div>
+			        </div>
+			    </div>
+			</div>	
+			
+			<div class="row">
+			    <div class="col-lg-4">
+			        <div class="row">
+			            <div class="col-lg-1"></div>
+			            <div class="col-lg-11">
+			                <p class="categoryTitleカテゴリー：投薬データ入力">カテゴリー：追加データ入力</p>
+			            </div>
+			        </div>			        
+			    </div>
+			</div>
+			<div class="row">
+			    <div class="col-lg-4">
+			        <div class="row">
+			            <div class="col-lg-1"></div>
+			            <div class="col-lg-11">
+			                <p class="categoryTitle">（日常の作業じゃありません）</p>
+			            </div>
+			        </div>			        
+			    </div>
+			</div>
+			<div class="row">
+			    <div class="col-lg-1"></div>
+			    <div class="col-lg-5">
+			        <center>
+			            <p class="colBG">作業名</p>
+			        </center>
+			    </div>
+			    <div class="col-lg-6">
+			        <center>
+			            <p class="colBG">観察内容</p>
+			        </center>
+			    </div>
+			</div>
+			<div class="row mb-3">
+			
+			    <div class="col-lg-1"></div>
+			    <div class="col-lg-5">
+			    	<textarea rows="3" cols="10"class="form-control"
+			                    th:field="*{otherActivity.activityName}"></textarea>
+			    </div>
+			    <div class="col-lg-6">
+			    	<textarea rows="3" cols="10"class="form-control"
+			                    th:field="*{otherActivity.activityObserContent}"></textarea>
+			    </div>
+			</div>							
+            
+            <div class="row" style="padding-bottom: 100px">
+                <div class="col" align="center">
+                    <input type="submit" value="登録" class="btn btnStyle" name="save">
+                    
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+
+    <footer>
+        <div class="row justify-content-center padding-top-15 amber-background" id="copy-right-footer">
+            <p>&copy; Copyright <strong>Bliss Stock</strong>. All Rights Reserved</p>
+        </div>
+    </footer>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+
+</body>
+
+</html>

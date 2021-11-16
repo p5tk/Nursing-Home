@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extrasspringsecurity4">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>老人ホーム支援システム</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="css/main-style.css">
+<link rel="stylesheet" type="text/css" href="css/home-page.css">
+</head>
+	<body>
+
+	<div class="topnav m-3">
+		<div class="logo-container">
+		<img th:src="@{images/logo.jpg}" class="img-responsive" alt="">
+		</div>
+		<nav class="navbar navbar-expand-md navbar-light">
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item"><a class="nav-link" th:href="@{PasswordChangeHome}">パスワード変更</a>
+					</li>
+					<li class="nav-item"><a class="nav-link" th:href="@{/logout}">ログアウト</a></li>
+				</ul>
+			</div>
+		</nav>		
+</div>
+	<div class="header">
+		<h2 align="center" th:inline="text">ようこそ [[${userName}]]さん!</h2><br><br>
+	</div>
+<div class="container">
+
+	<div class="row" style="padding-bottom: 50px">
+	
+       <div class="col-md-2 col-lg-3"></div>
+       <div class="col-md-4 col-lg-3 mx-auto" style="width: 230px">
+       		<a th:href="@{DailyConditionIndividual}"><button class="button bootstrap classes custom-class" type="submit" name="btnAddObs">毎日の状況</button></a>
+       		<img th:src="@{images/dailyreport.jpg}" class="float responsive" alt="dailyreport" width="204" height="206"  > <br>
+       </div>            	
+       <div class="col-md-4 col-lg-3 mx-auto" style="width: 230px">
+       		<a th:href="@{HelperSchedule}"><button class="button bootstrap classes custom-class" type="submit" name="btnSchedule">自分のスケジュール</button></a>
+       		<img th:src="@{images/schedule.jpg}" class="float responsive" alt="schedule" width="204" height="200"> 
+       </div>    
+       <div class="col-md-2 col-lg-3"></div>
+	</div>
+	</div>
+	   <!-- footer-area -->
+    <footer>
+        <div class="row justify-content-center padding-top-15 amber-background" id="copy-right-footer">
+            <p>&copy; Copyright <strong>Bliss Stock</strong>. All Rights Reserved</p>
+        </div>
+    </footer>
+</body>
+</html>

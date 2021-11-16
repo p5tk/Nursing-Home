@@ -1,0 +1,647 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <!-- Title -->
+    <title>老人ホーム支援システム</title>
+    <link rel="shortcut icon" type="image/png" href="img/logo.png" />
+
+    <!-- Bootstrap CSS File -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/main-style.css">
+    <link rel="stylesheet" href="css/elder-and-helper-input-form.css">
+</head>
+
+
+<body>
+    <div class="container-fluid">
+        <!-- navigation-bar-area -->
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <a class="navbar-brand" th:href="@{adminHome}"><img class="img-responsive" th:src="@{images/logo.jpg}"></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{AdminHome}">ホーム </span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{PasswordChangeHome}">パスワード変更</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/logout}">ログアウト</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- breadcrumb-area -->
+        <div class="bc-icons-2">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb amber-background">
+                    <li class="breadcrumb-item"><a class="black-text" th:href="@{AdminHome}">ホーム</a><i
+                            class="fa fa-angle-right mx-4"></i></li>
+                    <li class="breadcrumb-item"><a class="black-text" th:href="@{/ElderList}">ご高齢者一覧</a><i
+                            class="fa fa-angle-right mx-4" aria-hidden="true"></i></li>
+                    <li class="breadcrumb-item active">ご高齢者登録</li>
+                    <h5 th:inline="text" style="margin-left: 70%">[[${userName}]]</h5>
+                </ol>
+            </nav>
+        </div>
+
+        <!-- form-area -->
+        <div class="container-fluid">
+            <div class="row justify-content-center padding-top-15">
+                <div class="col-lg-8" >
+                    <form method="post" action="/ElderRegisterPost" th:object="${elder}" enctype="multipart/form-data">
+                        <div class="row form-sec-header">
+                            <div class="col-12 padding-top-15 text-center">
+                                <p><b>基本情報</b></p>
+                            </div>
+                        </div>
+
+                        <div class="form-group row ">
+                            <label for="lblFName" class="col-auto col-md-3 col-form-label">名前（名）：</label>
+                            <label for="lblRequire" class="col col-md-1 col-form-label red-text">必須</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" th:field="*{firstName}" placeholder="名" >
+                                <small th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></small>
+                            </div>
+                        </div>
+
+                        <div class="form-group row ">
+                            <label for="lblLName" class="col-auto col-md-3 col-form-label">名前（姓）：</label>
+                            <label for="lblRequire" class="col col-md-1 col-form-label red-text">必須</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" th:field="*{lastName}" placeholder="姓" >
+                                <small th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></small>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group row">
+							<label for="lblSex" class="col-auto col-md-3 colbir-form-label">性別：</label>
+							<label for="lblRequire" class="col col-md-1 col-form-label red-text">必須</label>
+							<div class="col-md-8">
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="radio" th:field="*{sex}" value="male" >
+									<label class="form-check-label" for="inlineRadio1">男性</label>
+								</div>
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="radio" th:field="*{sex}" value="female"> 
+									<label class="form-check-label" for="inlineRadio2">女性</label>
+								</div><br>
+								<small th:if="${#fields.hasErrors('sex')}" th:errors="*{sex}"></small>
+							</div>
+						</div>
+						
+						<div class="form-group row ">
+							<label for="lblDateBirth" class="col-auto col-md-3 col-form-label">生年月日：</label> 
+							<label for="lblRequire" class="col col-md-1 col-form-label red-text">必須</label>
+							<div class="col-md-8">
+								<input type="date" th:field="*{Birthday}" class="form-control" >
+								<small th:if="${#fields.hasErrors('Birthday')}" th:errors="*{Birthday}"></small>
+                            </div>
+                       </div>
+                        
+                        
+                        <div class="form-group row">
+							<label for="lblPhone" class="col-auto col-md-3 col-form-label">電話番号：</label> 
+							<label for="lblRequire" class="col col-md-1 col-form-label red-text">必須</label>
+							<div class="col-md-3">
+								<select id="countryCode" th:field="*{countryCode}" class="form-control" >
+									<option value="95">+95</option>
+									<option value="74">+74</option>
+									<option value="855">+855</option>
+									<option value="1">+1</option>
+									<option value="86">+86</option>
+									<option value="33">+33</option>
+									<option value="49">+49</option>
+									<option value="852">+852</option>
+									<option value="62">+62</option>
+									<option value="81">+81</option>
+								</select>
+                            </div>
+                            <div class="col-md-5">
+								<input type="text" th:field="*{phoneNo}" class="form-control" placeholder="09********" >
+								<small th:if="${#fields.hasErrors('phoneNo')}" th:errors="*{phoneNo}"></small>
+							</div>
+						</div>
+                            
+                        <div class="row form-sec-header">
+							<div class="col-12 padding-top-21 text-center">
+								<p>
+									<b>住所</b>
+								</p>
+							</div>
+						</div>
+						
+						<div class="form-group row">
+							<div class="col-12">
+								<input type="number" class="form-control" th:field="*{buildingOrRoomNo}" placeholder="建物名・号屋" >
+								<small th:if="${#fields.hasErrors('buildingOrRoomNo')}" th:errors="*{buildingOrRoomNo}"></small>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<div class="col-12">
+								<input type="text" class="form-control" th:field="*{street}"  placeholder="番地" >
+								<small th:if="${#fields.hasErrors('street')}" th:errors="*{street}"></small>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<div class="col-md-6">
+								<input type="text" class="form-control" th:field="*{city}" placeholder="市区町村" >
+								<small th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></small>
+							</div>
+							<div class="col-md-6">
+								<input type="text" class="form-control" th:field="*{state}" placeholder="都道府県" >
+								<small th:if="${#fields.hasErrors('state')}" th:errors="*{state}"></small>
+							</div>
+                        </div>
+
+						<div class="form-group row">
+							<div class="col-md-6">
+								<input type="number" class="form-control" th:field="*{postalCode}" placeholder="郵便番号を入力してください" >
+								<small th:if="${#fields.hasErrors('postalCode')}" th:errors="*{postalCode}"></small>
+							</div>
+							<div class="col-md-6">
+								<select class="form-control" th:field="*{country}">
+										<option value="">国を選んでください。</option>
+									   <option value="Afganistan">Afghanistan</option>
+									   <option value="Australia">Australia</option>
+									   <option value="Bangladesh">Bangladesh</option>
+									   <option value="Cambodia">Cambodia</option>
+									   <option value="Canada">Canada</option>
+									   <option value="China">China</option>
+									   <option value="France">France</option>
+									   <option value="Hong Kong">Hong Kong</option>
+									   <option value="Indonesia">Indonesia</option>
+									   <option value="India">India</option>
+									   <option value="Italy">Italy</option>
+									   <option value="Japan">Japan</option>
+									   <option value="Korea North">Korea North</option>
+									   <option value="Korea Sout">Korea South</option>
+									   <option value="Laos">Laos</option>
+									   <option value="Malaysia">Malaysia</option>
+									   <option value="Myanmar">Myanmar</option>
+									   <option value="Phillipines">Philippines</option>
+									   <option value="Singapore">Singapore</option>
+									   <option value="Taiwan">Taiwan</option>
+									   <option value="Thailand">Thailand</option>
+									   <option value="United Kingdom">United Kingdom</option>
+									   <option value="United States of America">United States of America</option>
+									   <option value="Vietnam">Vietnam</option>
+								</select>
+								<small th:if="${#fields.hasErrors('country')}" th:errors="*{country}"></small>
+							</div>
+                        </div>
+                        
+                        <div class="form-group row">
+							<label for="lblHireDate" class="col-auto col-md-3 col-form-label">入院日：</label>
+							 <label for="lblPwd" class="col col-md-1 col-form-label red-text">必須</label>
+							<div class="col-md-8">
+								<input type="date" class="form-control" th:field="*{admissionDate}" >
+								<small th:if="${#fields.hasErrors('admissionDate')}" th:errors="*{admissionDate}"></small>
+								
+							</div>
+					   </div>
+					   
+					   <div class="form-group row">
+							<label for="lblPhone" class="col-auto col-md-3 col-form-label">部屋番号：</label>
+							 <label for="lblPhno" class="col col-md-1 col-form-label red-text">必須</label>
+							<div class="col-md-8">
+								<select id="roomNo" th:field="*{roomNo}" class="form-control" >
+									<option value="100">100</option>
+									<option value="101">101</option>
+									<option value="102">102</option>
+									<option value="103">103</option>
+									<option value="104">104</option>
+									<option value="105">105</option>
+									<option value="106">106</option>
+									<option value="107">107</option>
+									<option value="108">108</option>
+									<option value="109">109</option>
+								</select>
+                            </div>
+                      </div>
+                      
+                      <div class="form-group row">
+							<label for="lblphoto" class="col-auto col-md-3 col-form-label">写真：</label>
+							<label for="lblpto" class="col col-md-1 col-form-label red-text">必須</label>
+							<div class="col-md-8">
+								<input type="file" class="form-control" name="elderphoto" aria-describedby="inputGroupFileAddon01" >
+								<small th:text="${photoErr}"></small>
+								<small th:text="${photoTypeErr}"></small>
+							</div>
+						</div>
+                      
+                      <div class="form-group row ">
+							<label for="lblDislikeMeal" class="col-auto col-md-3 col-form-label">嫌な食事：</label>
+						    <div class="col-md-1"></div>
+							<div class="col-md-8">
+									<textarea class="form-control" th:field="*{dislikeMeal}"></textarea>
+							</div>
+                      </div>
+                        
+                       <div class="form-group row ">
+							<label for="lblFavouriteMeal" class="col-auto col-md-3 col-form-label">好きな食事：</label>
+						    <div class="col-md-1"></div>
+							<div class="col-md-8">
+									<textarea class="form-control" th:field="*{favouriteMeal}"></textarea>
+							</div>
+                      </div>
+                      
+                      <div class="form-group row">
+							<label for="lblHobby" class="col-auto col-md-3 col-form-label">趣味：</label>
+							<div class="col-md-1"></div>
+							<div class="col-md-8">
+								<input type="checkbox" th:field="*{elder_hobby[__${0}__].hobbyName}"
+									th:value="reading" />Reading 
+								<input type="checkbox" th:field="*{elder_hobby[__${1}__].hobbyName}"
+									th:value="meditation" />Meditation
+								<input type="checkbox" th:field="*{elder_hobby[__${2}__].hobbyName}"
+									th:value="painting" />Painting
+                            </div>
+						</div>
+						<div class="form-group row">
+							<div class="col-md-4"></div>
+							<div class="col-md-8">
+								<input type="checkbox" th:field="*{elder_hobby[__${3}__].hobbyName}"
+									th:value="gardening" />Gardening 
+									<input type="checkbox" th:field="*{elder_hobby[__${4}__].hobbyName}"
+									th:value="knitting"/>Knitting 
+									<input type="checkbox" th:field="*{elder_hobby[__${5}__].hobbyName}"
+									th:value="others" />Others<br>
+									<small th:text="${hobbyErr}"></small>
+							</div>
+						</div> 
+
+						<div class="form-group row">
+							<label for="lblIllness" class="col-auto col-md-4 col-form-label">病気：</label>
+							<div class="col-md-8">
+								<textarea class="form-control" th:field="*{illness}"></textarea>
+                            </div>
+                      </div>
+                      
+                      <div class="form-group row ">
+							<label for="lblMediinfo" class="col-auto col-md-4 col-form-label">投薬の情報：</label>
+							<div class="col-md-8">
+									<textarea class="form-control" th:field="*{medicationInfo}"></textarea>
+							</div>
+                      </div>
+                      
+                      <div class="form-group row ">
+							<label for="lblRemark" class="col-auto col-md-3 col-form-label">備考：</label>
+						    <div class="col-md-1"></div>
+							<div class="col-md-8">
+									<textarea class="form-control" th:field="*{remarks}"></textarea>
+							</div>
+                      </div>
+                      
+                      <div class="row form-sec-header">
+							<div class="col-12 padding-top-21 text-center">
+								<p>
+									<b>一番目の担当者の情報</b>
+								</p>
+							</div>
+					 </div>
+					 
+					 <div class="form-group row ">
+                            <label for="lblFName" class="col-auto col-md-3 col-form-label">名前（名）：</label>
+                            <label for="lblRequire" class="col col-md-1 col-form-label red-text">必須</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" th:field="*{contact_person[__${0}__].firstName}" placeholder="名" >
+                                <small th:text="${cpfNameErr}"></small>
+                            </div>
+                    </div>
+                    
+                    <div class="form-group row ">
+                            <label for="lblLName" class="col-auto col-md-3 col-form-label">名前（姓）：</label>
+                            <label for="lblRequire" class="col col-md-1 col-form-label red-text">必須</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" th:field="*{contact_person[__${0}__].lastName}" placeholder="姓" >
+                                 <small th:text="${cplNameErr}"></small>
+                            </div>
+                    </div>
+                    
+                    <div class="form-group row">
+							<label for="lblRelation" class="col-auto col-md-3 col-form-label">親族関係：</label>
+							 <label for="lblRequire" class="col col-md-1 col-form-label red-text">必須</label>
+							<div class="col-md-8">
+								<select id="relationship" th:field="*{contact_person[__${0}__].relationship}" class="form-control" >
+									<option value=""></option>
+									<option value="father">父親</option>
+									<option value="mother">母親</option>
+									<option value="sister">姉・妹</option>
+									<option value="brother">兄・弟</option>
+									<option value="daughter">娘</option>
+									<option value="son">息子</option>
+									<option value="sisterinlaw">義姉・義妹</option>
+									<option value="brotherinlaw">義兄・義弟</option>
+								</select>
+								<small th:text="${cpRSErr}"></small>
+                            </div>
+                      </div>
+                      
+                      <div class="form-group row">
+							<label for="lblPhone" class="col-auto col-md-3 col-form-label">電話番号：</label> 
+							<label for="lblRequire" class="col col-md-1 col-form-label red-text">必須</label>
+							<div class="col-md-3">
+								<select id="countryCode" th:field="*{contact_person[__${0}__].countryCode}" class="form-control" >
+									<option value="95">+95</option>
+									<option value="74">+74</option>
+									<option value="855">+855</option>
+									<option value="1">+1</option>
+									<option value="86">+86</option>
+									<option value="33">+33</option>
+									<option value="49">+49</option>
+									<option value="852">+852</option>
+									<option value="62">+62</option>
+									<option value="81">+81</option>
+								</select>
+                            </div>
+                            <div class="col-md-5">
+								<input type="text" th:field="*{contact_person[__${0}__].phoneNo}" class="form-control" placeholder="09********" >
+                                 <small th:text="${cpPhoneErr}"></small>
+                                 <small th:if="${#fields.hasErrors('contact_person[__${0}__].phoneNo')}" th:errors="*{contact_person[__${0}__].phoneNo}"></small>
+                                 
+							</div>
+						</div>
+						
+						<div class="row form-sec-header">
+							<div class="col-12 padding-top-21 text-center">
+								<p>
+									<b>一番目の担当者の住所</b>
+								</p>
+							</div>
+						</div>
+						
+						<div class="form-group row">
+							<div class="col-12">
+								<input type="number" class="form-control" th:field="*{contact_person[__${0}__].buildingOrRoomNo}" placeholder="建物名・号屋" >
+                                 <small th:text="${cpRoomNoErr}"></small>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<div class="col-12">
+								<input type="text" class="form-control" th:field="*{contact_person[__${0}__].street}"  placeholder="番地" >
+                                 <small th:text="${cpStreetErr}"></small>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<div class="col-md-6">
+								<input type="text" class="form-control" th:field="*{contact_person[__${0}__].city}" placeholder="市区町村" >
+                                 <small th:text="${cpCityErr}"></small>
+							</div>
+							<div class="col-md-6">
+								<input type="text" class="form-control" th:field="*{contact_person[__${0}__].state}" placeholder="都道府県" >
+                                 <small th:text="${cpStateErr}"></small>
+							</div>
+                        </div>
+
+						<div class="form-group row">
+							<div class="col-md-6">
+								<input type="number" class="form-control" th:field="*{contact_person[__${0}__].postalCode}" placeholder="郵便番号" >
+                                 <small th:text="${cpPostalErr}"></small>
+							</div>
+							<div class="col-md-6">
+								<select class="form-control" th:field="*{contact_person[__${0}__].country}">
+										<option value="">国を選んでください。</option>
+									   <option value="Afganistan">Afghanistan</option>
+									   <option value="Australia">Australia</option>
+									   <option value="Bangladesh">Bangladesh</option>
+									   <option value="Cambodia">Cambodia</option>
+									   <option value="Canada">Canada</option>
+									   <option value="China">China</option>
+									   <option value="France">France</option>
+									   <option value="Hong Kong">Hong Kong</option>
+									   <option value="Indonesia">Indonesia</option>
+									   <option value="India">India</option>
+									   <option value="Italy">Italy</option>
+									   <option value="Japan">Japan</option>
+									   <option value="Korea North">Korea North</option>
+									   <option value="Korea Sout">Korea South</option>
+									   <option value="Laos">Laos</option>
+									   <option value="Malaysia">Malaysia</option>
+									   <option value="Myanmar">Myanmar</option>
+									   <option value="Phillipines">Philippines</option>
+									   <option value="Singapore">Singapore</option>
+									   <option value="Taiwan">Taiwan</option>
+									   <option value="Thailand">Thailand</option>
+									   <option value="United Kingdom">United Kingdom</option>
+									   <option value="United States of America">United States of America</option>
+									   <option value="Vietnam">Vietnam</option>
+								</select>
+                                 <small th:text="${cpCountryErr}"></small>
+							</div>
+                        </div>
+                        
+                        <div class="row form-sec-header">
+							<div class="col-12 padding-top-21 text-center">
+								<p>
+									<b>二番目の担当者の情報</b>
+								</p>
+							</div>
+					 </div>
+					 
+					 <div class="form-group row ">
+                            <label for="lblFName" class="col-auto col-md-4 col-form-label">名前（名）：</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" th:field="*{contact_person[__${1}__].firstName}" placeholder="名">
+                            </div>
+                    </div>
+                    
+                    <div class="form-group row ">
+                            <label for="lblLName" class="col-auto col-md-4 col-form-label">名前（姓）：</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" th:field="*{contact_person[__${1}__].lastName}" placeholder="姓">
+                            </div>
+                    </div>
+                    
+                    <div class="form-group row">
+							<label for="lblRelation" class="col-auto col-md-4 col-form-label">親族関係：</label>
+							<div class="col-md-8">
+								<select id="relationship1" th:field="*{contact_person[__${1}__].relationship}" class="form-control">
+									<option value=""></option>
+									<option value="father">父親</option>
+									<option value="mother">母親</option>
+									<option value="sister">姉・妹</option>
+									<option value="brother">兄・弟</option>
+									<option value="daughter">娘</option>
+									<option value="son">息子</option>
+									<option value="sisterinlaw">義姉・義妹</option>
+									<option value="brotherinlaw">義兄・義弟</option>
+								</select>
+                            </div>
+                      </div>
+                      
+                      <div class="form-group row">
+							<label for="lblPhone" class="col-auto col-md-4 col-form-label">電話番号：</label> 
+							<div class="col-md-3">
+								<select id="countryCode1" th:field="*{contact_person[__${1}__].countryCode}" class="form-control">
+									<option value="95">+95</option>
+									<option value="74">+74</option>
+									<option value="855">+855</option>
+									<option value="1">+1</option>
+									<option value="86">+86</option>
+									<option value="33">+33</option>
+									<option value="49">+49</option>
+									<option value="852">+852</option>
+									<option value="62">+62</option>
+									<option value="81">+81</option>
+								</select>
+                            </div>
+                            <div class="col-md-5">
+								<input type="text" th:field="*{contact_person[__${1}__].phoneNo}" class="form-control" placeholder="09********">
+							</div>
+						</div>
+						
+						<div class="row form-sec-header">
+							<div class="col-12 padding-top-21 text-center">
+								<p>
+									<b>二番目の担当者の住所</b>
+								</p>
+							</div>
+						</div>
+                        
+                        <div class="form-group row">
+							<div class="col-12">
+								<input type="number" class="form-control" th:field="*{contact_person[__${1}__].buildingOrRoomNo}" placeholder="建物名・号屋">
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<div class="col-12">
+								<input type="text" class="form-control" th:field="*{contact_person[__${1}__].street}"  placeholder="番地">
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<div class="col-md-6">
+								<input type="text" class="form-control" th:field="*{contact_person[__${1}__].city}" placeholder="市区町村">
+							</div>
+							<div class="col-md-6">
+								<input type="text" class="form-control" th:field="*{contact_person[__${1}__].state}" placeholder="都道府県">
+							</div>
+                        </div>
+
+						<div class="form-group row">
+							<div class="col-md-6">
+								<input type="number" class="form-control" th:field="*{contact_person[__${1}__].postalCode}" placeholder="郵便番号">
+							</div>
+							<div class="col-md-6">
+								<select class="form-control" th:field="*{contact_person[__${1}__].country}">
+										<option value="">国を選んでください。</option>
+									   <option value="Afganistan">Afghanistan</option>
+									   <option value="Australia">Australia</option>
+									   <option value="Bangladesh">Bangladesh</option>
+									   <option value="Cambodia">Cambodia</option>
+									   <option value="Canada">Canada</option>
+									   <option value="China">China</option>
+									   <option value="France">France</option>
+									   <option value="Hong Kong">Hong Kong</option>
+									   <option value="Indonesia">Indonesia</option>
+									   <option value="India">India</option>
+									   <option value="Italy">Italy</option>
+									   <option value="Japan">Japan</option>
+									   <option value="Korea North">Korea North</option>
+									   <option value="Korea Sout">Korea South</option>
+									   <option value="Laos">Laos</option>
+									   <option value="Malaysia">Malaysia</option>
+									   <option value="Myanmar">Myanmar</option>
+									   <option value="Phillipines">Philippines</option>
+									   <option value="Singapore">Singapore</option>
+									   <option value="Taiwan">Taiwan</option>
+									   <option value="Thailand">Thailand</option>
+									   <option value="United Kingdom">United Kingdom</option>
+									   <option value="United States of America">United States of America</option>
+									   <option value="Vietnam">Vietnam</option>
+								</select>
+							</div>
+                        </div>
+                        
+                         <!-- Update -->
+                        <div class="row form-sec-header">
+							<div class="col-12 padding-top-34 text-center">
+								<p>
+									<b>その他の添付ファイル</b>
+								</p>
+							</div>
+						</div>
+						
+						<div class="form-group row">
+							<div class="col-md-6">
+								<div class="row">
+									<div class="col-md-6">
+										<label>File 1</label>
+									</div>
+									<div class="col-md-6">
+										<input type="file" class="form-control" name="elderfile1">
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="row">
+									<div class="col-md-6">
+										<label>File 2</label>
+									</div>
+									<div class="col-md-6">
+										<input type="file" class="form-control" name="elderfile2">
+									</div>
+								</div>
+							</div>
+						</div>
+                        
+					
+                      <div class="form-group row justify-content-center spacing">
+							<div class="col-md-2">
+								<button type="reset" class="btn btn-secondary btnClear btn-size">クリア</button>
+							</div>
+							<div class="col-md-2">
+								<button type="submit" class="btn btn-success btnPassword btn-size">登録</button>
+							</div>
+                     	</div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- footer-area -->
+        <footer>
+            <div class="row justify-content-center padding-top-15 amber-background" id="copy-right-footer">
+                <p>&copy; Copyright <strong>Bliss Stock</strong>. All Rights Reserved</p>
+            </div>
+        </footer>
+
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script src="main-js.js"></script>
+</body>
+
+</html>

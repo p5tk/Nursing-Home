@@ -1,0 +1,38 @@
+@charset "UTF-8";
+/* breadcrumbs */
+.bc-icons-2 .breadcrumb{
+    border-radius: 0;
+    border: 0;
+}
+.bc-icons-2 .breadcrumb .black-text{
+    color: white;
+}
+.bc-icons-2 .breadcrumb-item + .breadcrumb-item::before {
+    content: none; 
+}
+.bc-icons-2 .breadcrumb-item.active {
+    color: lightgreen; 
+}
+
+.img-responsive{
+    width: 80px; 
+    height: 60px;
+
+}
+
+/* navigation bar */
+.nav-link{
+    float:right;
+}
+
+body{
+
+    font-family:貂ｸ繧ｴ繧ｷ繝�繧ｯ, "Yu Gothic", 貂ｸ繧ｴ繧ｷ繝�繧ｯ菴�, YuGothic, sans-serif;
+    font-size: 16px;
+    color: black;
+    font-weight: 500;
+}
+
+small{
+	color:red;
+}

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extrasspringsecurity4">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.21/datatables.min.css"/>
+
+
+ <link rel="stylesheet" type="text/css" href="/css/main-style.css">
+ <link rel="stylesheet" type="text/css" href="/css/daily-condition-list.css">
+<title>老人ホーム支援システム</title>
+</head>
+
+<body>
+	
+	<!-- navigation-bar-area -->
+        <nav class="navbar navbar-expand-lg navbar-light">
+           <img class="img-responsive" th:src="@{images/logo.jpg}">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item ">
+                        <a class="nav-link" th:href="@{/AdminHome}">ホーム</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/PasswordChangeHome}">パスワード変更</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/logout}">ログアウト</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        
+        <!-- breadcrumb-area -->
+        <div class="bc-icons-2">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb amber-background">
+                    <li class="breadcrumb-item"><a class="black-text" th:href="@{/AdminHome}">ホーム</a><i
+                            class="fa fa-angle-right mx-4"></i></li>
+                    <li class="breadcrumb-item active"><a class="black-text">毎日状況一覧</a>
+                        <i aria-hidden="true"></i></li>
+                    <h5 th:inline="text" style="margin-left: 80%">[[${userName}]]</h5>
+                </ol>
+            </nav>
+        </div>
+	
+	<div class="container-fluid" style="margin-bottom:100px;">
+		<form th:action="@{/dailyRecordTableSearch}" method="post">
+		<div class="row mb-3">
+			<div class="col-lg-1">
+				<label>名前</label>
+			</div>
+			
+			<div class="col-lg-2">
+				<input type="text" class="form-control" id="name" name="name">
+			</div>
+		
+			<div class="col-lg-2">
+				<input type="date" class="form-control" id="from_date" name="start">
+			</div>
+			<div class="col-lg-1">
+				<label>から</label>
+			</div>
+			
+			<div class="col-lg-2">
+				<input type="date" class="form-control" id="to_date" name="end">
+			</div>
+			<div class="col-lg-1">
+				<label>まで</label>
+			</div>
+			<div class="col-lg-1">
+				<button type="submit" class="btn btn-color">検索</button>
+			</div>
+
+		</div>
+		</form>
+		
+		<div class="row">
+			<div class="col-lg-1"></div>
+			<div class="col-lg-3"><small th:text="${noElderErr}"></small></div>
+			<div class="col-lg-8"><small th:text="${bothDateErr}"></small></div>
+		</div>
+		
+		<form action="/dailyRecordTableOperations" method="post">
+		
+		<div class="row mb-3 ">
+			
+				<button class="btn btn-danger btnStyle btn-spacing disableBtn" id="btnDelete" name="btnDelete" type="submit" disabled onclick="deleteItem()">
+				<span class="fa fa-trash-o" aria-hidden="true"></span>削除
+				</button>
+			
+			
+				<button class="btn btn-secondary btnStyle disableBtn" name="btnDownload" type="submit" disabled>
+				<span class="fa fa-download" aria-hidden="true"></span>	ダウンロード
+				</button>
+				
+				<a class="btn btn-spacing btn-color btn-spacing" th:href="@{/DailyConditionIndividual}">新規</a>
+			
+		</div>
+		
+		
+		
+		
+		<div class="row">
+			<div class="col">
+				<table class="table table-striped" id="myTable">
+					<thead class="colBG">
+						<tr>
+							<th><input type="checkbox" id="checkAll"></th>
+							<th>日付</th>
+							<th>高齢者</th>
+							<th>血圧</th>
+							<th>体温</th>
+							<th>朝食</th>
+							<th>昼食</th>
+							<th>夕食</th>
+							<th>パーソナルケア</th>
+							<th>投薬</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="dr,index:${dailyRecordList}">
+                            <td><input type="checkbox" th:value="${dr.dailyRecordID}" name="chosen"></td>
+                            <!-- To add Elder Name -->
+                            <td th:text="${dr.date}"></td>
+                            <td th:text="${dr.elder.firstName}+' '+${dr.elder.lastName}"></td>                            
+                            <td th:text="${dr.Vital.bpAMUpper + '-' + dr.Vital.bpAMLower + ' / ' + dr.Vital.bpPMUpper + '-' + dr.Vital.bpPMLower}"></td>
+                           	<td th:text="${dr.Vital.btAM + ' / ' + dr.Vital.btPM}"></td>
+                            <td th:text="${dr.Meal.breakfasObservationContent}"></td>
+                            <td th:text="${dr.Meal.lunchObservationContent}"></td>
+                            <td th:text="${dr.Meal.dinnerObservationContent}"></td>
+                            <td th:text="${dr.PersonalCare.oralCareAM + '-' + dr.PersonalCare.oralCarePM}"></td>
+                            <td th:text="${dr.Medication.medicationObservation}"></td>
+                            <td><a class="btn btn-color" th:href="@{'/editDailyRecord/' + ${dr.dailyRecordID}}">編集</a></td>
+                        </tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		
+		</form>
+		
+	</div>
+	
+		<!-- footer-area -->
+        <footer>
+            <div class="row justify-content-center padding-top-15 amber-background" id="copy-right-footer">
+                <p>&copy; Copyright <strong>Bliss Stock</strong>. All Rights Reserved</p>
+            </div>
+        </footer>
+	
+	
+	
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.21/datatables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+	
+    <script type="text/javascript"> 
+	    $(function(){
+	        var checkboxes = $(':checkbox:not(#checkAll)').click(function(event){
+	            $('.disableBtn').prop("disabled", checkboxes.filter(':checked').length == 0);
+	        });
+	
+	        $('#checkAll').click(function(event) {   
+	            checkboxes.prop('checked', this.checked);
+	            $('.disableBtn').prop("disabled", !this.checked)
+	        });
+	    });
+	</script>
+    
+    <script>
+    	$('#myTable').DataTable({
+    		"searching": false
+    	});	
+    </script>
+    
+	<script>
+		
+		
+		
+		$(document).ready(function(){
+			
+			$('[data-toggle="tooltip"]').tooltip();
+			
+			$("#btnSearch").click(function() {
+		        var term1 = $("#name").val().toLowerCase();
+		        var term2 = $("#from_date").val();
+		        var term3 = $("#to_date").val();
+		        
+		        //console.log(term2);
+		        
+		        $("table tbody tr").each(function(){
+		            $row = $(this);
+		            var name = $row.find("td:nth-child(3)").text().toLowerCase();
+		            var date = $row.find("td:nth-child(2)").text();
+		            
+		           // console.log(date);
+		            if((name.search(term1) >= 0) && (date >= term2) && (date <= term3)){                
+		                $row.show();
+		            } else{
+		                $row.hide();
+		                
+		            }
+		        });
+		    });
+		   
+		    });
+		
+	
+	</script>
+	
+	<script>
+		function deleteItem(){
+			
+			
+			if(confirm("削除してもよろしいですか？")){
+				$('#btnDelete').attr('name','btnDeleteConfirm');
+			}else{
+				$('#btnDelete').attr('name','btnDeleteCancel');		
+			}
+			
+		}
+	</script>
+	
+</body>
+</html>

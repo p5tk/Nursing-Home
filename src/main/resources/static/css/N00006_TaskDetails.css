@@ -1,0 +1,60 @@
+textarea{
+    vertical-align: middle;
+    resize: none;
+}
+ #btnSubmit,
+#btnBack{
+    display: inline-block;
+    vertical-align: top;
+    border: none;
+    border-radius: 2px;
+    font-size: 17px;
+    width: 80px;
+    height: 40px;
+}
+.btn-spacing 
+{
+margin-right: 30px;
+margin-bottom: 10px !important;
+}
+.elder {
+    display: inline-block;
+    vertical-align: top;
+}
+
+ul.elderList {
+    overflow-x:hidden;
+    white-space:nowrap;
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+    vertical-align: top;
+    list-style-type:none;
+}
+
+ul.elderList li {
+    display:inline;
+}
+
+ul.elderList li+li:before {
+  color: black;
+  content: ",";
+}
+.btnChoose {
+  background-color: gold;
+  color: black;
+  padding: 15px 20px;
+  border: none;
+  cursor: pointer;
+  width: 200px;
+  height: 50px;
+  opacity: 0.9;
+}
+
+ul.elderModalList{
+	list-style-type:none;
+}
+
+.spacing{
+	padding-bottom:30px;
+}

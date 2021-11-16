@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extrasspringsecurity4">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+    
+   <link rel="stylesheet" type="text/css" href="css/dailyRecords.css">
+   <link rel="stylesheet" type="text/css" href="css/daily-condition.css">
+   
+    <title>老人ホーム支援システム</title>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light">
+            <img class="img-responsive imgStyle" th:src="@{images/logo.jpg}">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/AdminHome}">ホーム </span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/PasswordChangeHome}">パスワード変更</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/logout}">ログアウト</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        
+        <!-- breadcrumb-area -->
+        <div class="bc-icons-2">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb amber-background navAndFooter">
+                    <li class="breadcrumb-item"><a class="black-text" th:href="@{/AdminHome}">ホーム</a><i
+                            class="fa fa-angle-right mx-4"></i></li>
+                    <li class="breadcrumb-item active"><a class="black-text">毎日状況(一括入力)</a>
+                        <i aria-hidden="true"></i></li>
+                </ol>
+            </nav>
+        </div>
+
+    <div class="container-fluid" id="myContainer" style="margin-bottom:100px;">
+		
+		
+
+        <form action="/postDailyRecordList" method="post" th:object="${wrapper}">
+            <div class="row mb-3">
+                <div class="col-lg-1">
+                    <label>日付</label>
+                </div>
+                <div class="col-lg-2">
+                    <input type="text" class="form-control" th:value="${date}" disabled>
+                </div>
+                <div class="col-lg-1"></div>
+                <div class="col-lg-1">
+                    <label>カテゴリー</label>
+                </div>
+                <div class="col-lg-3">
+                    <select class="form-control" disabled>
+                    	<option value="vital" selected>バイタルデータ入力</option>
+                    	<option value="mealBreakfast" >食事データ入力 > 朝食</option>
+                    	<option value="mealLunch">食事データ入力 > 昼食</option>
+                    	<option value="mealDinner">食事データ入力 > 夕食</option>
+                    	<option value="snack">食事（おやつ）データ入力</option>
+                    	<option value="personalCare">パーソナルケアデータ入力</option>
+                    	<option value="medication">投薬データ入力</option>
+                    	<option value="activity">追加データ入力</option>
+                    </select>
+                </div>
+                <div class="col-lg-2">
+                	
+                </div>
+                <div class="col-lg-2">
+                   <a th:href="@{/DailyConditionIndividual}" class="btn btn-secondary" >個人入力</a>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-lg-2">
+                    
+
+                </div>
+                <div class="col-lg-8"></div>
+                <div class="col-lg-1">
+                    <input type="submit" class="btn btn-warning" value="保存します">
+                </div>
+            </div>
+
+            <!-- Entire Row -->
+            <div class="entireRow">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label class="colBG">高齢者のコー</label>
+                            </div>
+                            <div class="col-lg-6">
+                                <label class="colBG">高齢者名</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="row">
+                                    <div class="col">
+                                        <p class="colBG">体温</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="row">
+                                            <p>AM</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="row">
+                                            <p>PM</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="row">
+                                            <p>C</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="row">
+                                            <p>C</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="row">
+                                            <input type="number" class="form-control" id="bt_am">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="row">
+                                            <input type="number" class="form-control" id="bt_pm">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="row">
+                                            <input type="button" class="btn btnStyle" value="一括" onclick="copyText('bt_am')">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="row">
+                                            <input type="button" class="btn btnStyle" value="一括" onclick="copyText('bt_pm')">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="row">
+                                    <p class="colBG">血圧</p>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="row">
+                                            <div class="col">
+                                                <p>AM</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <p>上</p>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <p>下</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <input type="number" class="form-control" id="bp_am_upper">
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <input type="number" class="form-control" id="bp_am_lower">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <input type="button" class="btn btnStyle" value="一括" onclick="copyText('bp_am_upper')">
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <input type="button" class="btn btnStyle" value="一括" onclick="copyText('bp_am_lower')">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="row">
+                                            <div class="col">
+                                                <p>PM</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <p>上</p>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <p>下</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <input type="number" class="form-control" id="bp_pm_upper">
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <input type="number" class="form-control" id="bp_pm_lower">
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <input type="button" class="btn btnStyle" value="一括" onclick="copyText('bp_pm_upper')">
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <input type="button" class="btn btnStyle" value="一括" onclick="copyText('bp_pm_lower')">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2">
+                                <div class="row mb-4">
+                                    <div class="col">
+                                        <p class="colBG">体重</p>
+                                    </div>
+                                </div>
+                                <div class="row mb-2"></div>
+                                <div class="row mb-4">
+                                	<div class="col">KG</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <input type="number" class="form-control" id="body_weight">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <input type="button" class="btn btnStyle" value="一括" onclick="copyText('body_weight')">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="row mb-4">
+                                    <div class="col">
+                                        <p class="colBG">おしっこ</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                	<div class="col">合計(ml)</div>
+                                	<div class="col">回数</div>
+                                </div>
+                                <div class="row mb-2"></div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <input type="number" class="form-control" id="pee_ml">
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <input type="number" class="form-control" id="pee_times">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <input type="button" class="btn btnStyle" value="一括" onclick="copyText('pee_ml')">
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <input type="button" class="btn btnStyle" value="一括" onclick="copyText('pee_times')">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="row mb-4">
+                                    <div class="col">
+                                        <p class="colBG">うんち</p>
+                                    </div>
+                                </div>
+                                <div class="row mb-2">
+                                	<div class="col">量</div>
+                                	<div class="col">回数</div>
+                                </div>
+                                <div class="row mb-4"></div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <input type="text" class="form-control" id="poop_volume">
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <input type="number" class="form-control" id="poop_times">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <input type="button" class="btn btnStyle" value="一括" onclick="copyText('poop_volume')">
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <input type="button" class="btn btnStyle" value="一括" onclick="copyText('poop_times')">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>    
+            
+            <div class="row">
+            	<table class="table" id="myTable">
+            		
+            		<thead style="border:none;">	
+            			<tr style="border:none;">
+            				<th style="border:none;"></th>
+            			</tr>
+            		</thead>
+            		<tbody>
+            			<tr th:each="dr,stat:*{recordList}">
+            				<input type="hidden" th:value="${dr.date}" th:field="*{recordList[__${stat.index}__].date}">
+            				<!-- additional hidden field is added for elderId because elder id cannot be accessed from disabled input -->
+            				<input type="hidden" th:value="${dr.elder.elderId}" th:field="*{recordList[__${stat.index}__].elder}">
+            				
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].dailyRecordID}">
+            				
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].snack.snack_id}">
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].snack.snackName}">
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].snack.snackConsumptionAmount}">
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].snack.drinkNmae}">
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].snack.drinkConsumptionAmount}">
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].snack.observationContent}">
+            				
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].otherActivity.dailyRecordAndOtherID}">
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].otherActivity.dailyRecordAndOtherID}">
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].otherActivity.dailyRecordAndOtherID}">
+            				
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].personalCare.personalCareID}">
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].personalCare.oralCareAM}">
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].personalCare.oralCarePM}">
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].personalCare.bathing}">
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].personalCare.exercise}">
+            				
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].medication.dailyRecAndMedicationID}">
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].medication.medicineName}">
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].medication.medicationObservation}">
+            				            				
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].meal.mealID}">
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].meal.breakfastSFName}">
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].meal.breakfastSFAmount}">
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].meal.breakfastSDName}">
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].meal.breakfastSDAmount}">
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].meal.breakfastSoupName}">
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].meal.breakfastSoupAmount}">
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].meal.breakfasObservationContent}">
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].meal.lunchSFName}">
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].meal.lunchSFAmount}">
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].meal.lunchSDName}">
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].meal.lunchSDAmount}">
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].meal.lunchSoupName}">
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].meal.lunchSoupAmount}">
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].meal.lunchObservationContent}">
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].meal.dinnerSFName}">
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].meal.dinnerSFAmount}">
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].meal.dinnerSDName}">
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].meal.dinnerSDAmount}">
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].meal.dinnerSoupName}">
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].meal.dinnerSoupAmount}">
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].meal.dinnerObservationContent}">
+            				
+            				<input type="hidden" th:field="*{recordList[__${stat.index}__].vital.vitalID}">
+            				
+            				<td style="width: 11%"><input type="text" class="form-control" th:value="${dr.elder.elderId}" disabled></td>
+            				<td style="width: 14%" ><input type="text" class="form-control" th:value="${dr.elder.firstName}+${dr.elder.lastName}" disabled></td>
+            				<td style="width: 8%">
+            					<input type="text" class="form-control txtBoxWithBorder" th:id="bt_am+${stat.index}" th:field="*{recordList[__${stat.index}__].vital.btAM}">
+            				</td>
+            				<td style="width: 9%">
+            					<input type="text" class="form-control txtBoxWithBorder" th:id="bt_pm+${stat.index}" th:field="*{recordList[__${stat.index}__].vital.btPM}">
+            				</td>
+            				<td style="width: 6%">
+            					<input type="text" class="form-control txtBoxWithBorder" th:id="bp_am_upper+${stat.index}" th:field="*{recordList[__${stat.index}__].vital.bpAMUpper}">
+            				</td>
+            				<td style="width: 6%">
+            					<input type="text" class="form-control txtBoxWithBorder" th:id="bp_am_lower+${stat.index}" th:field="*{recordList[__${stat.index}__].vital.bpAMLower}">
+            				</td>
+            				<td style="width: 7%">
+            					<input type="text" class="form-control txtBoxWithBorder" th:id="bp_pm_upper+${stat.index}" th:field="*{recordList[__${stat.index}__].vital.bpPMUpper}">
+            				</td>
+            				<td style="width: 7%">
+            					<input type="text" class="form-control txtBoxWithBorder" th:id="bp_pm_lower+${stat.index}" th:field="*{recordList[__${stat.index}__].vital.bpPMLower}">
+            				</td>
+            				<td style="width: 8%">
+            					<input type="text" class="form-control txtBoxWithBorder" th:id="body_weight+${stat.index}" th:field="*{recordList[__${stat.index}__].vital.bodyWeight}">
+            				</td>
+            				<td style="width: 6%">
+            					<input type="text" class="form-control txtBoxWithBorder" th:id="pee_ml+${stat.index}" th:field="*{recordList[__${stat.index}__].vital.peeMl}">
+            				</td>
+            				<td style="width: 6%">
+            					<input type="text" class="form-control txtBoxWithBorder" th:id="pee_times+${stat.index}" th:field="*{recordList[__${stat.index}__].vital.peeTimes}">
+            				</td>
+            				<td style="width: 6%">
+            					<input type="text" class="form-control txtBoxWithBorder" th:id="poop_volume+${stat.index}" th:field="*{recordList[__${stat.index}__].vital.poopVolume}">
+            				</td>
+            				<td style="width: 6%">
+            					<input type="text" class="form-control txtBoxWithBorder" th:id="poop_times+${stat.index}" th:field="*{recordList[__${stat.index}__].vital.poopTimes}">
+            				</td>
+        
+            			</tr>
+            		</tbody>
+            	</table>
+            </div>
+		<!--  
+            <div class="something">
+                <div class="row mb-2">
+                    <table>
+                        <tr th:each="vital,index: ${vtListObj.vtList}">
+                            <td><input type="number" th:value="1" th:field="*{vtList[__${index.index}__].btAM}"></td>
+                            <td><input type="number" th:value="2" th:field="*{vtList[__${index.index}__].btPM}"></td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+		-->
+
+
+        </form>
+		
+		
+		<script> 
+			function copyText(id){
+				var field = document.getElementById(id);
+				var length = document.getElementById('myTable').rows.length -1;
+				console.log(length);
+				for(var i=0;i<length;i++){
+					var copy = document.getElementById(id+i);
+					copy.value = field.value;
+				}
+				
+				
+				
+			}
+		</script>
+
+
+    </div>
+
+	<footer class="navAndFooter">
+        <div class="row justify-content-center padding-top-15 amber-background" id="copy-right-footer">
+            <p class="footerText">&copy; Copyright <strong>Bliss Stock</strong>. All Rights Reserved</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+   
+</body>
+
+</html>

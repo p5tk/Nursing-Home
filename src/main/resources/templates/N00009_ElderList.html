@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extrasspringsecurity4">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <!-- Title -->
+    <title>老人ホーム支援システム</title>
+    <link rel="shortcut icon" type="image/png" href="img/logo.png" />
+
+    <!-- Bootstrap CSS File -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.21/datatables.min.css"/>
+	
+    <!-- Stylesheet -->
+    
+    <link rel="stylesheet" href="css/main-style.css">
+    <link rel="stylesheet" href="css/elder-list.css">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <!-- navigation-bar-area -->
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <a class="navbar-brand" th:href="@{adminHome}"><img class="img-responsive" th:src="@{images/logo.jpg}"></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{AdminHome}">ホーム </span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{PasswordChangeHome}">パスワード変更</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/Logout}">ログアウト</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        
+        <!-- breadcrumb-area -->
+        <div class="bc-icons-2">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb amber-background">
+                    <li class="breadcrumb-item"><a class="black-text" th:href="@{AdminHome}">ホーム</a><i
+                            class="fa fa-angle-right mx-4"></i></li>
+                    <li class="breadcrumb-item active">ご高齢者一覧</li>
+                    <h5 th:inline="text" style="margin-left: 80%">[[${userName}]]</h5>
+                </ol>
+            </nav>
+        </div>
+
+        <!-- form-area -->
+        <div class="container-fluid">
+        
+        		<!--  
+                <div class="form-group row">
+                    <label for="lblID" class="col-auto col-md-1 col-form-label">ID</label>
+                    <div class="col-md-2">
+                        <input type="text" class="form-control" >
+                    </div>
+                    <label for="lblAge" class="col-auto col-md-1 col-form-label">Age</label>
+                    <div class="col-md-2">
+                        <input type="text" class="form-control">
+                    </div>
+                    <label for="lblSex" class="col-auto col-md-1 col-form-label">Sex</label>
+                    <div class="col-md-3">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="gender" value="male">
+                            <label class="form-check-label" for="inlineRadio1">Male</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="gender" value="female">
+                            <label class="form-check-label" for="inlineRadio2">Female</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <a class="btn btn-warning" th:href="@{/elderRegisterForm}">New</a>
+                    </div>
+                </div>
+                
+
+                <div class="form-group row ">
+                    <label for="lblID" class="col-auto col-md-1 col-form-label">Hire Date</label>
+                    <div class="col-md-2">
+                        <input type="date" class="form-control">
+                    </div>
+                     <label for="lblName" class="col-auto col-md-1 col-form-label">Name</label>
+                    <div class="col-md-2">
+                        <input type="text" class="form-control" id="searchName">
+                    </div>
+                </div>
+                -->
+                
+                <form action="/tableOperations" method="post">
+                <div class="form-group row">
+                		
+                			<button type="submit" class="btn btnStyleElderList btn-spacing btn-color" name= "addDailyConditionBtn"  th:disabled="${date==null}">
+                			<span class="fa fa-plus-circle" aria-hidden="true"></span>毎日状況追加</button>
+ 		
+ 						
+							<button type="submit" class="btn btn-default btn-md btn-danger btnStyleElderList disableBtn" id="btnDelete" onclick="deleteItem()" name="deleteBtn" disabled>
+  							<span class="fa fa-trash-o" aria-hidden="true"></span>削除</button>
+						
+						
+						
+							<button type="submit" class="btn btn-default btn-md btn-secondary btnStyleElderList btn-spacing disableBtn" name="downloadBtn" disabled>
+  							<span class="fa fa-download" aria-hidden="true"></span>ダウンロード</button>
+  							<input type="hidden" th:value="${date}" name="record_date">
+							<input type="hidden" th:value="${category}" name="category">
+						
+                		
+                	<div class="col-md-5"></div>
+                	<div class="col-md-2">
+                		<a class="btn btn-color " th:href="@{/ElderRegisterForm}">新規</a>
+                	</div>
+                </div>
+                
+                <div class="form-group row ">
+                  </div>
+
+                <div class="form-group row spacing">
+                    <div class="form-group col">
+                        <div class="table-responsive">
+                            <table class="table table-striped" id="myTable">
+                                <thead class="colBG">
+                                    <tr>
+                                        <th><input type="checkbox" id="checkAll"></th>
+                                        <th>ID</th>
+                                        <th id="first_name">名前（名）</th>
+                                        <th>名前（姓）</th>
+                                        <th>生年月日</th>
+                                        <th>性別</th>
+                                        <th>部屋番号</th>
+                                        <th>入院日</th>
+                                        <th></th>
+                              			<th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="elder,index:${elderList}">
+                                        <td><input type="checkbox" th:value="${elder.elderId}" name="chosen"></td>
+                                        <td th:text="${elder.elderId}"></td>
+                                        <td th:text="${elder.firstName}"></td>
+                                        <td th:text="${elder.lastName}"></td>
+                                        <td th:text="${#dates.format(elder.Birthday, 'yyyy-MM-dd')}"></td>
+                                        <td th:text="${elder.sex}"></td>
+                                        <td th:text="${elder.roomNo}"></td>
+                                        <td th:text="${#dates.format(elder.admissionDate, 'yyyy-MM-dd')}"></td>
+                                        <td><a class="btn btn-color" th:href="@{'/editElder/' + ${elder.elderId}}">編集</a></td>
+                                        <td><a class="btn btn-color" th:href="@{'/viewDailyCondition/' + ${elder.elderId}}">毎日状況確認</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+        		</form>
+        </div>
+
+
+    <!-- footer-area -->
+    <footer>
+        <div class="row justify-content-center padding-top-15 amber-background" id="copy-right-footer">
+            <p>&copy; Copyright <strong>Bliss Stock</strong>. All Rights Reserved</p>
+        </div>
+    </footer>
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.21/datatables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+    
+    <script type="text/javascript"> 
+	    $(function(){
+	        var checkboxes = $(':checkbox:not(#checkAll)').click(function(event){
+	            $('.disableBtn').prop("disabled", checkboxes.filter(':checked').length == 0);
+	        });
+	
+	        $('#checkAll').click(function(event) {   
+	            checkboxes.prop('checked', this.checked);
+	            $('.disableBtn').prop("disabled", !this.checked)
+	        });
+	    });
+	</script>
+    	
+    <script>
+    	$('#myTable').DataTable();	
+    </script>
+    
+    <script>
+		function deleteItem(){
+			
+			
+			if(confirm("削除してもよろしいですか？")){
+				$('#btnDelete').attr('name','btnDeleteConfirm');
+			}else{
+				$('#btnDelete').attr('name','btnDeleteCancel');		
+			}
+			
+		}
+	</script>
+</body>
+
+</html>
